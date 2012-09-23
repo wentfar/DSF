@@ -15,13 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Definition.h">
+    <ClInclude Include="SourceFiles\Definition.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sort.cpp">
+    <ClCompile Include="SourceFiles\StringOperation.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Debug\DataStructure.log" />
   </ItemGroup>
 </Project>
