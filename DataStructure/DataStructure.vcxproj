@@ -11,9 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Definition.h" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -24,7 +21,10 @@
     <None Include="Debug\DataStructure.log" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LinkList.cpp" />
+    <ClCompile Include="Tree.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Tree.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D33DE3FA-F1CE-4DF4-9A28-DF8849136B1B}</ProjectGuid>

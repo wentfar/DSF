@@ -1,10 +1,12 @@
 #include <iostream>
-#include "Definition.h"
 #include <stack>
 #include <ctype.h>
 
 using namespace std;
 
+/*链表的操作主要体现在对指针的操作，考察对指针的理解；对链表的操作关键在于对链表的遍历，一种是常规正序遍历，另一种是逆序时采用的递归遍历；链表复杂操作可能会需要多个指针协调工作；注意考虑链表为空的情况*/
+
+//链表定义
 typedef struct LNode{
 	int data;
 	struct LNode *next;
@@ -22,21 +24,6 @@ typedef struct LNode_Dul{
 	int freq;
 }LNode_Dul,*LinkList_Dul;
 
-//顺序生成一个有头结点单链表，元素类型为char
-void CreatList_L(LinkList_C &L){
-	L=new LNode_C();
-	L->next=NULL;
-	LinkList_C q=L;
-	char c;
-	while((c=getchar())!='\n'){
-		LinkList_C p=new LNode_C();
-		p->data=c;
-		p->next=NULL;
-
-		q->next=p;
-		q=p;
-	}
-}
 
 //顺序生成一个有头结点单链表，元素类型为int
 void CreatList(LinkList *ptr_L)
@@ -53,6 +40,22 @@ void CreatList(LinkList *ptr_L)
 		temp_L->data = data;
 		p->next = temp_L;
 		p = temp_L;
+	}
+}
+
+//顺序生成一个有头结点单链表，元素类型为char
+void CreatList_L(LinkList_C &L){
+	L=new LNode_C();
+	L->next=NULL;
+	LinkList_C q=L;
+	char c;
+	while((c=getchar())!='\n'){
+		LinkList_C p=new LNode_C();
+		p->data=c;
+		p->next=NULL;
+
+		q->next=p;
+		q=p;
 	}
 }
 
@@ -151,34 +154,9 @@ void CreatList_L_NoHeader(LinkList &L, int n){
 	}
 }
 
-//2.13在带头结点的单链表结构上实现线性表操作Locate(L,x)
-int Locate(LinkList L,int x){
-	int i=0;
-	LinkList p=L;
-	while(p&&p->data!=x){
-		p=p->next;
-		i++;
-	}
-	if (!p) return 0;
-	return i;
-}
 
-//2.14在带头结点的单链表结构上实现线性表操作Length(L)
-int ListLength_L(LinkList L){
-	if (L == NULL)
-	{
-		throw "error";
-	}
-	int i=0;
-	LinkList p=L->next;
-	while (p){
-	p=p->next;
-	i++;
-	}
-	return i;
-}
 
-//链表反转，遍历，然后前方插入
+//链表反转。先遍历，然后前方插入
 void InverseList(LinkList *L)
 {
 	if ((*L) == NULL)
@@ -209,9 +187,35 @@ void InverseList(LinkList *L)
 	tmpFirst->next = NULL; 
 }
 
+//在带头结点的单链表结构上实现线性表操作，定位值为x的结点
+int Locate(LinkList L,int x){
+	int i=0;
+	LinkList p=L;
+	while(p&&p->data!=x){
+		p=p->next;
+		i++;
+	}
+	if (!p) return 0;
+	return i;
+}
 
-//查找倒数第K个节点，设立双指针，先让第一个遍历到第k个节点，与此同时，第二个指针开始从头遍历，当第一个节点到尾部时，第二个节点即为倒数第k个节点
-LNode* FindReverse(LinkList L, int k)
+//在带头结点的单链表结构上实现线性表操作，求链表长度
+int ListLength_L(LinkList L){
+	if (L == NULL)
+	{
+		throw "error";
+	}
+	int i=0;
+	LinkList p=L->next;
+	while (p){
+	p=p->next;
+	i++;
+	}
+	return i;
+}
+
+//查找倒数第K个节点。设立双指针，先让第一个遍历到第k个节点，与此同时，第二个指针开始从头遍历，当第一个节点到尾部时，第二个节点即为倒数第k个节点
+LNode* FindNodeReverse(LinkList L, int k)
 {
 	if (L == NULL || k == 0)
 	{
@@ -243,7 +247,7 @@ LNode* FindReverse(LinkList L, int k)
 }
 
 //查找单链表中间元素，即第（n/2+1）个结点。
-LNode* FindMiddle(LinkList L)
+LNode* FindMiddleNode(LinkList L)
 {
 	if (L == NULL)
 	{
@@ -303,6 +307,268 @@ void VisitListReverse_Recur(LinkList L)
 		VisitListReverse_Recur(L->next);
 		cout<<L->data<<' ';
 	}
+}
+
+//判断一个单链表中是否有环。设立快慢指针，快指针一定在环内追赶上慢指针。
+bool HasCircle(LinkList L)
+{
+	if (L == NULL)
+	{
+		throw "error";
+	}
+
+	LinkList p1 = L;
+	LinkList p2 = L;
+
+	while(p2->next != NULL && p2->next->next != NULL)
+	{
+		p1 = p1->next;
+		p2 = p2->next->next;
+
+		if (p1 == p2)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+//已知一个单链表中存在环，求进入环中的第一个节点。先判断是否存在环，找出相遇节点，然后将原链表转换为两个相交的链表，一个为从原头结点到相遇节点，另一个为从相遇节点的下一个节点到相遇节点
+LNode* FindFirstCircleNode(LinkList L)
+{
+	if (L == NULL)
+	{
+		throw "error";
+	}
+
+	LinkList p1 = L;
+	LinkList p2 = L;
+
+	while(p2->next != NULL && p2->next->next != NULL)
+	{
+		p1 = p1->next;
+		p2 = p2->next->next;
+
+		//先判断是否存在环
+		if (p1 == p2)
+		{
+			LinkList ptr_circle = p1->next;//新链表1的头结点
+			int len_circle = 1;
+			while(ptr_circle != p1)
+			{
+				ptr_circle = ptr_circle->next;
+				len_circle++;
+			}
+
+			LinkList ptr_in = L;//新链表2的头结点
+			int len_in = 1;
+			while(ptr_in != p1)
+			{
+				ptr_in = ptr_in->next;
+				len_in++;
+			}
+
+			//求取1、2两个链表的长度差值
+			if (len_circle > len_in)
+			{
+				int k = len_circle - len_in;
+				while (k--)
+				{
+					ptr_circle = ptr_circle->next;
+				}
+			}
+			else
+			{
+				int k =len_in - len_circle;
+				while (k--)
+				{
+					ptr_in = ptr_in->next;
+				}
+			}
+
+			//求取第一个相遇节点
+			while(ptr_circle != ptr_in)
+			{
+				ptr_circle = ptr_circle->next;
+				ptr_in = ptr_in->next;
+			}
+			return ptr_circle;
+		}
+	}
+	return NULL;
+}
+
+//给出一单链表头指针pHead和一节点指针pToBeDeleted，O(1)时间复杂度删除节点pToBeDeleted。将待删除节点的下一个节点的内容复制到待删除节点，然后删除待删除节点下一节点
+void Delete(LinkList pHead, LNode* pToBeDeleted)
+{
+	if (pHead == NULL || pToBeDeleted == NULL || pHead == pToBeDeleted)
+	{
+		throw "error";
+	}
+	LinkList tmp = pToBeDeleted->next;
+	if (tmp != NULL)
+	{
+		pToBeDeleted->data = pToBeDeleted->next->data;
+		pToBeDeleted->next = pToBeDeleted->next->next;
+		delete tmp;
+	} 
+	else//待删除节点为最后一个节点
+	{
+		tmp = pHead;
+		while(tmp->next != NULL && tmp->next->next != NULL)
+		{
+			tmp = tmp->next;
+		}
+		tmp->next = NULL;
+		delete pToBeDeleted;
+	}
+}
+
+//已知线性表中的元素以值递增有序排列，并以单链表作存储结构。试写一高效的算法，删除表中所有值大于mink且小于maxk的元素（若表中存在这样的元素），同时释放被删结点空间，并分析你的算法的时间复杂度
+int ListDelete_L(LinkList &L,float mink, float maxk){
+	if (mink>maxk) return -2;
+	LinkList p=L->next, p_pre=L, q;
+	while(p && p->data<maxk){
+		if(p->data<=mink){
+			p_pre=p;
+			p=p->next;
+		}
+		else{
+			q=p;
+			p=p->next;
+			free(q);
+		}
+	}
+	p_pre->next=p;
+	return 0;
+}
+
+//已知线性表中的元素以值递增有序排列，并以单链表作存储结构。试写一高效的算法删除表中所有值相同多余元素。
+void ListDelete_LSameNode(LinkList &L){
+	LinkList p=L, p_pre=L, q;
+	p=p->next;
+	while(p->next){
+		p_pre=p;
+		p=p->next;
+		while(p && p_pre->data==p->data){//可能有多个和pre相同的元素，递增p
+			p_pre->next=p->next;
+			q=p;
+			p=p->next;
+			free(q);
+		}
+		if (!p) break;
+	}
+}
+
+//带freq域的双向循环链表上的查找
+LNode_Dul * Locate_DuList(LinkList_Dul &L,int x){
+	LinkList_Dul p=L->next, q=NULL;
+	while(p!=L && p->data!=x){
+		p=p->next;
+	}
+	if(p==L) return NULL;
+	++(p->freq);
+	q=p->prior;
+	while(q!=L && q->freq<p->freq){
+		q=q->prior;
+	}
+
+	//删除p
+	p->prior->next=p->next;
+	p->next->prior=p->prior;
+
+	//插入p
+	p->next=q->next;//先将用到q->next指针处理完
+	q->next->prior=p;
+
+	q->next=p;//然后改变q->next值
+	p->prior=q;
+
+	return p;
+}
+
+
+
+// 判断两个单链表是否相交
+bool Intersect(LinkList L1, LinkList L2)
+{
+	if (L1 == NULL || L2 == NULL)
+	{
+		throw "error";
+	}
+
+	LinkList p1 = L1;
+	while(p1->next != NULL)
+	{
+		p1 = p1->next;
+	}
+
+	LinkList p2 = L2;
+	while(p2->next != NULL)
+	{
+		p2 = p2->next;
+	}
+
+	if (p1 == p2)
+	{
+		return true;
+	}
+	return false;
+}
+
+// 求两个单链表相交的第一个节点。先对齐两个链表的当前结点，使之到尾节点的距离相等
+LNode* FindFirsrtIntersect(LinkList L1, LinkList L2)
+{
+	if (L1 == NULL || L2 == NULL)
+	{
+		throw "error";
+	}
+
+	LinkList p1 = L1;
+	int len1 = 0;
+	while(p1->next != NULL)
+	{
+		len1++;
+		p1 = p1->next;
+	}
+	int len2 = 0;
+	LinkList p2 = L2;
+	while(p2->next != NULL)
+	{
+		len2++;
+		p2 = p2->next;
+	}
+
+	//如果相交，则求相交节点
+	if (p1 == p2)
+	{
+		if (len1 < len2)
+		{
+			int i = len2 - len1;
+			p2 = L2;
+			while(i--)
+			{
+				p2 = p2->next;
+			}
+		}
+		else
+		{
+			int i = len1 - len2;
+			p1 = L1;
+			while(i--)
+			{
+				p1 = p1->next;
+			}
+		}
+
+		while(p1 != p2)
+		{
+			p1 = p1->next;
+			p2 = p2->next;
+		}
+		return p1;
+	}
+	return NULL;
 }
 
 // 已知两个单链表a 和b 各自有序，把它们合并成一个链表依然有序
@@ -387,328 +653,8 @@ LNode* MergeSortedList_Recursive(LinkList pHead1,LinkList pHead2)
 	return pHeadMerged; 
 }
 
-//2.15已知指针ha和hb分别指向两个单链表的头结点，并且已知两个链表的长度分别为m和n。试写一算法将这两个链表连接在一起，假设指针hc指向连接后的链表的头结点，并要求算法以尽可能短的时间完成连接运算。请分析你的算法的时间复杂度
-void MergeList_L(LinkList ha,LinkList hb,LinkList &hc){
-	LinkList pa=ha;
-	LinkList pb=hb;
-	while(pa->next&&pb->next){
-		pa=pa->next;
-		pb=pb->next;
-	}
-	if (!pa->next){
-		hc=hb;
-		while(pb->next) pb=pb->next;
-		pb->next=ha->next;
-	}
-	else{
-		hc=ha;
-		while(pa->next) pa=pa->next;
-		pa->next=hb->next;
-	}
-}
-
-//判断一个单链表中是否有环，设立快慢指针，快指针一定在环内追赶上慢指针。
-bool HasCircle(LinkList L)
-{
-	if (L == NULL)
-	{
-		throw "error";
-	}
-
-	LinkList p1 = L;
-	LinkList p2 = L;
-
-	while(p2->next != NULL && p2->next->next != NULL)
-	{
-		p1 = p1->next;
-		p2 = p2->next->next;
-
-		if (p1 == p2)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-// 判断两个单链表是否相交
-bool Intersect(LinkList L1, LinkList L2)
-{
-	if (L1 == NULL || L2 == NULL)
-	{
-		throw "error";
-	}
-
-	LinkList p1 = L1;
-	while(p1->next != NULL)
-	{
-		p1 = p1->next;
-	}
-
-	LinkList p2 = L2;
-	while(p2->next != NULL)
-	{
-		p2 = p2->next;
-	}
-
-	if (p1 == p2)
-	{
-		return true;
-	}
-	return false;
-}
-
-// 求两个单链表相交的第一个节点，先对齐两个链表的当前结点，使之到尾节点的距离相等
-LNode* FindFirsrtIntersect(LinkList L1, LinkList L2)
-{
-	if (L1 == NULL || L2 == NULL)
-	{
-		throw "error";
-	}
-
-	LinkList p1 = L1;
-	int len1 = 0;
-	while(p1->next != NULL)
-	{
-		len1++;
-		p1 = p1->next;
-	}
-	int len2 = 0;
-	LinkList p2 = L2;
-	while(p2->next != NULL)
-	{
-		len2++;
-		p2 = p2->next;
-	}
-
-	//如果相交，则求相交节点
-	if (p1 == p2)
-	{
-		if (len1 < len2)
-		{
-			int i = len2 - len1;
-			p2 = L2;
-			while(i--)
-			{
-				p2 = p2->next;
-			}
-		}
-		else
-		{
-			int i = len1 - len2;
-			p1 = L1;
-			while(i--)
-			{
-				p1 = p1->next;
-			}
-		}
-
-		while(p1 != p2)
-		{
-			p1 = p1->next;
-			p2 = p2->next;
-		}
-		return p1;
-	}
-	return NULL;
-}
-
-//已知一个单链表中存在环，求进入环中的第一个节点，先判断是否存在环，找出相遇节点，然后将原链表转换为两个相交的链表，一个为从头结点到相遇节点，另一个为从相遇节点的下一个节点到相遇节点
-LNode* FindFirstCircleNode(LinkList L)
-{
-	if (L == NULL)
-	{
-		throw "error";
-	}
-
-	LinkList p1 = L;
-	LinkList p2 = L;
-
-	while(p2->next != NULL && p2->next->next != NULL)
-	{
-		p1 = p1->next;
-		p2 = p2->next->next;
-
-		//先判断是否存在环
-		if (p1 == p2)
-		{
-			LinkList ptr_circle = p1->next;//新链表1的头结点
-			int len_circle = 1;
-			while(ptr_circle != p1)
-			{
-				ptr_circle = ptr_circle->next;
-				len_circle++;
-			}
-
-			LinkList ptr_in = L;//新链表2的头结点
-			int len_in = 1;
-			while(ptr_in != p1)
-			{
-				ptr_in = ptr_in->next;
-				len_in++;
-			}
-
-			//求取1、2两个链表的长度差值
-			if (len_circle > len_in)
-			{
-				int k = len_circle - len_in;
-				while (k--)
-				{
-					ptr_circle = ptr_circle->next;
-				}
-			}
-			else
-			{
-				int k =len_in - len_circle;
-				while (k--)
-				{
-					ptr_in = ptr_in->next;
-				}
-			}
-
-			//求取第一个相遇节点
-			while(ptr_circle != ptr_in)
-			{
-				ptr_circle = ptr_circle->next;
-				ptr_in = ptr_in->next;
-			}
-			return ptr_circle;
-		}
-	}
-	return NULL;
-}
-
-//给出一单链表头指针pHead和一节点指针pToBeDeleted，O(1)时间复杂度删除节点pToBeDeleted，将待删除节点的下一个节点的内容复制到待删除节点，然后删除待删除节点下一节点
-void Delete(LinkList pHead, LNode* pToBeDeleted)
-{
-	if (pHead == NULL || pToBeDeleted == NULL || pHead == pToBeDeleted)
-	{
-		throw "error";
-	}
-	LinkList tmp = pToBeDeleted->next;
-	if (tmp != NULL)
-	{
-		pToBeDeleted->data = pToBeDeleted->next->data;
-		pToBeDeleted->next = pToBeDeleted->next->next;
-		delete tmp;
-	} 
-	else//待删除节点为最后一个节点
-	{
-		tmp = pHead;
-		while(tmp->next != NULL && tmp->next->next != NULL)
-		{
-			tmp = tmp->next;
-		}
-		tmp->next = NULL;
-		delete pToBeDeleted;
-	}
-}
-
-//2.16已知指针la和lb分别指向两个无头结点单链表中的首元结点。下列算法是从表la中删除自第i个元素起共len个元素，并将提取的那一部分放入result链表中。
-Status Extract(LinkList &la, int i, int len, LinkList &result){
-	if (i<=0||len<0) return INFEASIBLE;
-	if (!la) return INFEASIBLE;
-	LinkList p=la;
-	LinkList p_pre=NULL;
-	int k=1;
-	while(p && k<i){
-		p_pre=p;
-		k++;
-		p=p->next;
-	}
-	if (!p) return INFEASIBLE;//i过大的情况
-
-	int t=1;
-	result=p;
-	while(p && t<len){
-		t++;
-		p=p->next;
-	}
-	if(!p) return INFEASIBLE;//len过大的情况
-
-	if (p_pre)
-	{
-		p_pre->next=p->next;
-	} 
-	else
-	{
-		la=p->next;//i=1的情况，p_pre未初始化
-	}
-	p->next=NULL;
-	return OK;
-}
-
-//2.16已知指针la和lb分别指向两个无头结点单链表中的首元结点。下列算法将链表result插入到链表lb第i个元素之前。
-Status Insert(LinkList &lb, int i, LinkList &result){
-	if (i<=0 || !lb || !result)	return INFEASIBLE;
-	LinkList p=lb, p_pre, q=result, q_pre;
-	if (i == 1)
-	{
-		while(q){
-			q_pre=q;
-			q=q->next;
-		}
-		q_pre->next=lb;
-		lb=result;
-	} 
-	else
-	{
-		int k=1;
-		while(p && k<i){
-			p_pre=p;
-			p=p->next;
-			k++;
-		}
-		if (!p) return INFEASIBLE;
-		while(q){
-			q_pre=q;
-			q=q->next;
-		}
-		q_pre->next=p_pre->next;
-		p_pre->next=result;
-	}
-	return OK;
-
-}
-
-//2.19已知线性表中的元素以值递增有序排列，并以单链表作存储结构。试写一高效的算法，删除表中所有值大于mink且小于maxk的元素（若表中存在这样的元素），同时释放被删结点空间，并分析你的算法的时间复杂度
-Status ListDelete_L(LinkList &L,float mink, float maxk){
-	if (mink>maxk) return ERROR;
-	LinkList p=L->next, p_pre=L, q;
-	while(p && p->data<maxk){
-		if(p->data<=mink){
-			p_pre=p;
-			p=p->next;
-		}
-		else{
-			q=p;
-			p=p->next;
-			free(q);
-		}
-	}
-	p_pre->next=p;
-	return OK;
-	}
-
-//2.20已知线性表中的元素以值递增有序排列，并以单链表作存储结构。试写一高效的算法删除表中所有值相同多余元素。
-void ListDelete_LSameNode(LinkList &L){
-	LinkList p=L, p_pre=L, q;
-	p=p->next;
-	while(p->next){
-		p_pre=p;
-		p=p->next;
-		while(p && p_pre->data==p->data){//可能有多个和pre相同的元素，递增p
-			p_pre->next=p->next;
-			q=p;
-			p=p->next;
-			free(q);
-		}
-		if (!p) break;
-	}
-}
-
-//2.24假设有两个按元素值递增有序排列的线性表A和B，均以单链表作存储结构，请编写算法将A表和B表归并成一个按元素值递减有序（即非递增有序，允许表中含有值相同的元素）排列的线性表C，并要求利用原表（即A表和B表）的结点空间构造C表。
-Status ListMergeOppose_L(LinkList &A,LinkList &B,LinkList &C){
+//假设有两个按元素值递增有序排列的线性表A和B，均以单链表作存储结构，请编写算法将A表和B表归并成一个按元素值递减有序（即非递增有序，允许表中含有值相同的元素）排列的线性表C，并要求利用原表（即A表和B表）的结点空间构造C表。
+int ListMergeOppose_L(LinkList &A,LinkList &B,LinkList &C){
 	LinkList pa=A->next, pb=B->next, pc_pre=NULL, pc, q;
 	while(pa || pb){
 		if (pa && (!pb || pa->data <= pb->data)){//注意if的条件
@@ -726,10 +672,10 @@ Status ListMergeOppose_L(LinkList &A,LinkList &B,LinkList &C){
 		pc_pre=pc;
 	}
 	C=A;A->next=pc;
-	return OK;
+	return 0;
 }
 
-//2.26求元素递增排列的线性表A和B的元素的交集并存入C中
+//求元素递增排列的线性表A和B的元素的交集并存入C中
 void LinkList_Intersect(LinkList A,LinkList B,LinkList &C){
 	LinkList pa=A->next, pb=B->next, pc;
 	C=pc=(LNode*)malloc(sizeof(LNode));
@@ -752,8 +698,8 @@ void LinkList_Intersect(LinkList A,LinkList B,LinkList &C){
 	}
 }
 
-//2.33把单链表L的元素(char)按类型分为三个循环链表.A, B, C为带头结点的单循环链表类型.
-Status LinkList_Divide(LinkList_C &L, LinkList_C &A, LinkList_C &B, LinkList_C &C){
+//把单链表L的元素(char)按类型分为三个循环链表。A, B, C为带头结点的单循环链表类型。
+int LinkList_Divide(LinkList_C &L, LinkList_C &A, LinkList_C &B, LinkList_C &C){
 	LinkList_C s=L->next, a, b, c;
 	A=a=(LinkList_C)malloc(sizeof(LNode_C));
 	B=b=(LinkList_C)malloc(sizeof(LNode_C));
@@ -777,37 +723,8 @@ Status LinkList_Divide(LinkList_C &L, LinkList_C &A, LinkList_C &B, LinkList_C &
 	a->next=A;
 	b->next=B;
 	c->next=C;
-	return OK;
+	return 0;
 }
-
-//2.38带freq域的双向循环链表上的查找
-LNode_Dul * Locate_DuList(LinkList_Dul &L,int x){
-	LinkList_Dul p=L->next, q=NULL;
-	while(p!=L && p->data!=x){
-			p=p->next;
-		}
-		if(p==L) return NULL;
-		++(p->freq);
-		q=p->prior;
-		while(q!=L && q->freq<p->freq){
-				q=q->prior;
-			}
-
-			//删除p
-			p->prior->next=p->next;
-			p->next->prior=p->prior;
-
-			//插入p
-			p->next=q->next;//先将用到q->next指针处理完
-			q->next->prior=p;
-
-			q->next=p;//然后改变q->next值
-			p->prior=q;
-
-	return p;
-}
-
-
 
 
 
