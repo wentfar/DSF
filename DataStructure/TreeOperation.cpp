@@ -221,7 +221,7 @@ Status InOrderTraverse_Thr(BiThrTree T, Status (*visit)(TElemType)){
 			p=p->rchild;
 			visit(p->data);
 		}
-		p=p->rchild;//右标志为Link，后继为右子树的最左边
+		p=p->rchild;//此时右标志为Link，后继应为右子树的最左边
 	}
 	return OK;
 }
