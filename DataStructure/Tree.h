@@ -47,7 +47,7 @@ private:
 	bool StructureCmp(BiNode *pRoot1, BiNode *pRoot2) const;
 	bool IsBalanceBiTree(BiNode *root, int &height) const;
 	void BiTreeMirror(BiNode *&root);
-	int GetMaxDistance(BiNode *pRoot) const;
+	void GetMaxDistance(BiNode *pRoot, int &Left_max, int &Right_max) const;
 
 	struct BiNode *root;
 };

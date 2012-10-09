@@ -477,31 +477,46 @@ void BiTree<T>::BiTreeMirror(BiNode *&root)
 template <typename T>
 int BiTree<T>::GetMaxDistance() const
 {
-	return GetMaxDistance(root);
+	int Left_max, Right_max;
+	GetMaxDistance(root, Left_max, Right_max);
+	return Left_max + Right_max;
 }
 
 //求二叉树中节点的最大距离
-//即二叉树中相距最远的两个节点之间的距离。
+//即二叉树中相距最远的两个节点之间的距离。先求左子树和右子树分别的最大值。
 template <typename T>
-int BiTree<T>::GetMaxDistance(BiNode *pRoot) const
+void BiTree<T>::GetMaxDistance(BiNode *pRoot, int &Left_max, int &Right_max) const
 {
+	int L_maxLeft, L_maxRight, R_maxLeft, R_maxRight;
 	if (pRoot->LChild == NULL && pRoot->RChild == NULL)
 	{
-		return 0;
+		Left_max = Right_max = 0;
 	}
 	else if (pRoot->LChild == NULL && pRoot->RChild != NULL)
 	{
-		return GetMaxDistance(pRoot->RChild)  + 1;
+		Left_max = 0;
+
+		GetMaxDistance(pRoot->RChild, R_maxLeft, R_maxRight);
+		Right_max = (R_maxLeft>R_maxRight?R_maxLeft:R_maxRight) + 1;
 	}
 	else if (pRoot->LChild != NULL && pRoot->RChild == NULL)
 	{
-		return GetMaxDistance(pRoot->LChild) + 1;
+		GetMaxDistance(pRoot->LChild, L_maxLeft, L_maxRight);
+		Left_max = (L_maxLeft>L_maxRight?L_maxLeft:L_maxRight) + 1;
+
+		Right_max = 0;
 	}
 	else
 	{
-		return GetMaxDistance(pRoot->LChild) + GetMaxDistance(pRoot->RChild) + 2;
+		GetMaxDistance(pRoot->LChild, L_maxLeft, L_maxRight);
+		Left_max = (L_maxLeft>L_maxRight?L_maxLeft:L_maxRight) + 1;
+
+		GetMaxDistance(pRoot->RChild, R_maxLeft, R_maxRight);
+		Right_max = (R_maxLeft>R_maxRight?R_maxLeft:R_maxRight) + 1;
 	}
 }
+
+
 
 void main()
 {
