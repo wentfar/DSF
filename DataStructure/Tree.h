@@ -12,6 +12,7 @@ public:
 
 	BiTree();
 	~BiTree();
+	void GetRoot(BiNode **root) const;
 	void VisitBiTreePreOrder() const;
 	void VisitBiTreeInOrder() const;
 	void VisitBiTreePostOrder() const;
@@ -19,7 +20,15 @@ public:
 	int NodeCount2() const;
 	int TreeDepth() const;
 	void LevelTravel() const;
-	void Convert(BiNode **pFirstNode, BiNode **pLastNode);
+	void Convert1(BiNode **pFirstNode, BiNode **pLastNode);
+	void Convert2(BiNode **pFirstNode, BiNode **pLastNode);
+	int GetNodeNumKthLevel1(int k) const;
+	int GetNodeNumKthLevel2(int k) const;
+	int LeafCount() const;
+	bool StructureCmp(BiNode *pRoot2) const;
+	bool IsBalanceBiTree() const;
+	void BiTreeMirror();
+	int GetMaxDistance() const;
 
 private:
 	void CreatBiTree(BiNode **root);
@@ -31,7 +40,14 @@ private:
 	int NodeCount2(BiNode *root) const;
 	int TreeDepth(BiNode *root) const;
 	void LevelTravel(BiNode *root) const;
-	void Convert(BiNode *root, BiNode *&pre);
+	void Convert1(BiNode *root, BiNode **pre);
+	void Convert2(BiNode* root, BiNode **pFirstNode, BiNode **pLastNode);
+	int GetNodeNumKthLevel2(BiNode *pRoot, int k) const;
+	int LeafCount(BiNode *root) const;
+	bool StructureCmp(BiNode *pRoot1, BiNode *pRoot2) const;
+	bool IsBalanceBiTree(BiNode *root, int &height) const;
+	void BiTreeMirror(BiNode *&root);
+	int GetMaxDistance(BiNode *pRoot) const;
 
 	struct BiNode *root;
 };
