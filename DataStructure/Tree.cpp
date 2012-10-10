@@ -516,6 +516,11 @@ void BiTree<T>::GetMaxDistance(BiNode *pRoot, int &Left_max, int &Right_max) con
 	}
 }
 
+template <typename T>
+bool BiTree<T>::IsCompleteBinaryTree(BiNode * pRoot) const
+{
+
+}
 
 
 void main()
