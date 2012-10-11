@@ -12,18 +12,18 @@ BiTree<T>::BiTree()
 
 //创建二叉树
 template <typename T>
-void BiTree<T>::CreatBiTree(BiNode **root)
+void BiTree<T>::CreatBiTree(BiNode<T> **pRoot)
 {
 	T data;
 	cin.clear();
 	cin.sync();
 	if(cin>>data)
 	{
-		*root = new BiNode(data, NULL, NULL);
-		if (*root != NULL)
+		*pRoot = new BiNode<T>(data, NULL, NULL);
+		if (*pRoot != NULL)
 		{
-			CreatBiTree(&((*root)->LChild));
-			CreatBiTree(&((*root)->RChild));
+			CreatBiTree(&((*pRoot)->LChild));
+			CreatBiTree(&((*pRoot)->RChild));
 		}
 		else
 		{
@@ -32,7 +32,7 @@ void BiTree<T>::CreatBiTree(BiNode **root)
 	}
 	else//叶子节点
 	{
-		*root = NULL;
+		*pRoot = NULL;
 	}
 }
 
@@ -44,72 +44,80 @@ BiTree<T>::~BiTree()
 
 //释放结点
 template <typename T>
-void BiTree<T>::ReleaseBiTree(BiNode **root)
+void BiTree<T>::ReleaseBiTree(BiNode<T> **pRoot)
 {
-	if (*root != NULL)
+	if (*pRoot != NULL)
 	{
-		ReleaseBiTree(&(*root)->LChild);
-		ReleaseBiTree(&(*root)->RChild);
-		delete (*root);
+		ReleaseBiTree(&(*pRoot)->LChild);
+		ReleaseBiTree(&(*pRoot)->RChild);
+		delete (*pRoot);
 	}
 }
 
 template <typename T>
-void BiTree<T>::GetRoot(BiNode **p_root) const
+void BiTree<T>::GetRoot(BiNode<T> **pRoot) const
 {
-	*p_root = root;
+	*pRoot = root;
 }
+
+template <typename T>
+void PrintNode(BiNode<T> node)
+{
+	cout<<node.k_data<<" ";
+}
+
 
 //遍历二叉树
 template <typename T>
-void BiTree<T>::VisitBiTreePreOrder() const
+void BiTree<T>::VisitBiTreePreOrder(void(*Visit)(BiNode<T> node)) const
 {
-	VisitBiTreePreOrder(root);
+	VisitBiTreePreOrder(root, Visit);
 }
+
 
 //遍历二叉树
 template <typename T>
-void BiTree<T>::VisitBiTreePreOrder(BiNode *root) const
+void BiTree<T>::VisitBiTreePreOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> node)) const
 {
-	if (root != NULL)
+	if (pRoot != NULL)
 	{
-		cout<<root->k_data<<" ";
-		VisitBiTreePreOrder(root->LChild);
-		VisitBiTreePreOrder(root->RChild);
+		Visit(*pRoot);
+		VisitBiTreePreOrder(pRoot->LChild, Visit);
+		VisitBiTreePreOrder(pRoot->RChild, Visit);
 	} 
 }
 
 template <typename T>
-void BiTree<T>::VisitBiTreeInOrder() const
+void BiTree<T>::VisitBiTreeInOrder(void(*Visit)(BiNode<T> node)) const
 {
-	VisitBiTreeInOrder(root);
+	VisitBiTreeInOrder(root, Visit);
 }
 
 template <typename T>
-void BiTree<T>::VisitBiTreeInOrder(BiNode *root) const
+void BiTree<T>::VisitBiTreeInOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> node)) const
 {
-	if (root != NULL)
+	if (pRoot != NULL)
 	{
-		VisitBiTreeInOrder(root->LChild);
-		cout<<root->k_data<<" ";
-		VisitBiTreeInOrder(root->RChild);
+		VisitBiTreeInOrder(pRoot->LChild, Visit);
+		Visit(*pRoot);
+		VisitBiTreeInOrder(pRoot->RChild, Visit);
 	} 
 }
 
 template <typename T>
-void BiTree<T>::VisitBiTreePostOrder() const
+void BiTree<T>::VisitBiTreePostOrder(void(*Visit)(BiNode<T> node)) const
 {
-	VisitBiTreePostOrder(root);
+	VisitBiTreePostOrder(root, Visit);
 }
 
 template <typename T>
-void BiTree<T>::VisitBiTreePostOrder(BiNode *root) const
+void BiTree<T>::VisitBiTreePostOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> node)) const
 {
-	if (root != NULL)
+	if (pRoot != NULL)
 	{
-		VisitBiTreePostOrder(root->LChild);
-		VisitBiTreePostOrder(root->RChild);
-		cout<<root->k_data<<" ";
+		VisitBiTreePostOrder(pRoot->LChild, Visit);
+		VisitBiTreePostOrder(pRoot->RChild, Visit);
+		Visit(*pRoot);
 	} 
 }
 
@@ -124,12 +132,12 @@ int BiTree<T>::NodeCount1() const
 
 //二叉树的结点计数。遍历一遍即可得到。
 template <typename T>
-void BiTree<T>::NodeCount1(BiNode *root, int* count) const
+void BiTree<T>::NodeCount1(BiNode<T> *pRoot, int* count) const
 {
-	if (root != NULL)
+	if (pRoot != NULL)
 	{
-		NodeCount1(root->LChild, count);
-		NodeCount1(root->RChild, count);
+		NodeCount1(pRoot->LChild, count);
+		NodeCount1(pRoot->RChild, count);
 		(*count)++;
 	} 
 }
@@ -143,11 +151,11 @@ int BiTree<T>::NodeCount2() const
 
 //二叉树的结点计数。如果二叉树不为空，二叉树节点个数 = 左子树节点个数 + 右子树节点个数 + 1。
 template <typename T>
-int BiTree<T>::NodeCount2(BiNode *root) const
+int BiTree<T>::NodeCount2(BiNode<T> *pRoot) const
 {
-	if (root != NULL)
+	if (pRoot != NULL)
 	{
-		return NodeCount2(root->LChild) + NodeCount2(root->RChild) + 1;
+		return NodeCount2(pRoot->LChild) + NodeCount2(pRoot->RChild) + 1;
 	} 
 	else
 	{
@@ -163,12 +171,12 @@ int BiTree<T>::TreeDepth() const
 }
 
 template <typename T>
-int BiTree<T>::TreeDepth(BiNode *root) const
+int BiTree<T>::TreeDepth(BiNode<T> *pRoot) const
 {
-	if (root != NULL)
+	if (pRoot != NULL)
 	{
-		int LDepth = TreeDepth(root->LChild);
-		int RDepth = TreeDepth(root->RChild);
+		int LDepth = TreeDepth(pRoot->LChild);
+		int RDepth = TreeDepth(pRoot->RChild);
 		return (LDepth>RDepth?LDepth:RDepth) + 1; 
 	} 
 	else
@@ -186,13 +194,13 @@ void BiTree<T>::LevelTravel() const
 
 //分层遍历二叉树（按层次从上往下，从左往右）
 template <typename T>
-void BiTree<T>::LevelTravel(BiNode *root) const
+void BiTree<T>::LevelTravel(BiNode<T> *pRoot) const
 {
-	queue<BiNode> q;
-	if(root != NULL) q.push(*root);
+	queue<BiNode<T>> q;
+	if(pRoot != NULL) q.push(*pRoot);
 	while(!q.empty())
 	{
-		BiNode biNode = q.front();
+		BiNode<T> biNode = q.front();
 		cout<<biNode.k_data<<" ";
 		q.pop();
 		if (biNode.LChild != NULL)
@@ -210,7 +218,7 @@ void BiTree<T>::LevelTravel(BiNode *root) const
 //pFirstNode: 转换后双向有序链表的第一个节点指针
 //pLastNode: 转换后双向有序链表的最后一个节点指针
 template <typename T>
-void BiTree<T>::Convert1(BiNode **pFirstNode, BiNode **pLastNode)
+void BiTree<T>::Convert1(BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
 {
 	if (root == NULL)
 	{
@@ -237,25 +245,25 @@ void BiTree<T>::Convert1(BiNode **pFirstNode, BiNode **pLastNode)
 }
 
 template <typename T>
-void BiTree<T>::Convert1(BiNode *root, BiNode **pre)//实质为中序遍历二叉查找树，其中设置一个pre指针指向上一个节点。注意pre为引用类型。
+void BiTree<T>::Convert1(BiNode<T> *pRoot, BiNode<T> **pre)//实质为中序遍历二叉查找树，其中设置一个pre指针指向上一个节点。注意pre为引用类型。
 {
-	if (root != NULL)
+	if (pRoot != NULL)
 	{
 		bool flag_pre = false;
 		bool flag_p = false;
-		Convert1(root->LChild, pre);
+		Convert1(pRoot->LChild, pre);
 		
 		//线索化
-		if (*pre != NULL && (*pre)->RChild == NULL) {(*pre)->RChild = root; flag_pre = true;}
-		if (root->LChild == NULL) {root->LChild = *pre; flag_p = true;}
+		if (*pre != NULL && (*pre)->RChild == NULL) {(*pre)->RChild = pRoot; flag_pre = true;}
+		if (pRoot->LChild == NULL) {pRoot->LChild = *pre; flag_p = true;}
 		
 		//修正与线索不一致的指针
-		if(flag_pre == true && root->LChild != *pre) root->LChild = *pre;
-		if(flag_p == true && *pre && (*pre)->RChild != root) (*pre)->RChild = root;
+		if(flag_pre == true && pRoot->LChild != *pre) pRoot->LChild = *pre;
+		if(flag_p == true && *pre && (*pre)->RChild != pRoot) (*pre)->RChild = pRoot;
 
-		*pre = root;//更新pre
+		*pre = pRoot;//更新pre
 
-		Convert1(root->RChild, pre);
+		Convert1(pRoot->RChild, pre);
 	}
 }
 
@@ -268,36 +276,36 @@ void BiTree<T>::Convert1(BiNode *root, BiNode **pre)//实质为中序遍历二叉查找树，
 //	如果右子树为空，对应双向有序链表的最后一个节点是根节点，右边不需要其他操作；
 //	如果右子树不为空，对应双向有序链表的最后一个节点就是右子树转换后双向有序链表的最后一个节点，同时将根节点和右子树转换后的双向有序链表的第一个节点连接。
 template <typename T>
-void BiTree<T>::Convert2(BiNode **pFirstNode, BiNode **pLastNode)
+void BiTree<T>::Convert2(BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
 {
 	Convert2(root, pFirstNode, pLastNode);
 }
 
 template <typename T>
-void BiTree<T>::Convert2(BiNode* root, BiNode **pFirstNode, BiNode **pLastNode)
+void BiTree<T>::Convert2(BiNode<T> *pRoot, BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
 {
-	if (root == NULL)
+	if (pRoot == NULL)
 	{
 		*pFirstNode = NULL;
 		*pLastNode = NULL;
 	}
 	BiNode *pLeftFirst, *pLeftLast, *pRightFirst, *pRightLast;  
-	if (root->LChild == NULL)//处理左子树
+	if (pRoot->LChild == NULL)//处理左子树
 	{
-		*pFirstNode = root;
+		*pFirstNode = pRoot;
 	}
 	else
 	{
-		Convert2(root->LChild, &pLeftFirst, &pLeftLast);
+		Convert2(pRoot->LChild, &pLeftFirst, &pLeftLast);
 		*pFirstNode = pLeftFirst;
 
-		pLeftLast->RChild = root;
-		root->LChild = pLeftLast;
+		pLeftLast->RChild = pRoot;
+		pRoot->LChild = pLeftLast;
 	}
 
-	if (root->RChild == NULL)//处理右子树
+	if (pRoot->RChild == NULL)//处理右子树
 	{
-		*pLastNode = root;
+		*pLastNode = pRoot;
 	}
 	else
 	{
@@ -305,7 +313,7 @@ void BiTree<T>::Convert2(BiNode* root, BiNode **pFirstNode, BiNode **pLastNode)
 		*pLastNode = pRightLast;
 
 		root->RChild = pRightFirst;
-		pRightFirst->LChild = root;
+		pRightFirst->LChild = pRoot;
 	}
 }
 
@@ -357,7 +365,7 @@ int BiTree<T>::GetNodeNumKthLevel2(int k) const
 //	（3）如果二叉树不为空且k>1，返回左子树中k-1层的节点个数与右子树k-1层节点个数之和
 //	参考代码如下：
 template <typename T>
-int BiTree<T>::GetNodeNumKthLevel2(BiNode *pRoot, int k) const
+int BiTree<T>::GetNodeNumKthLevel2(BiNode<T> *pRoot, int k) const
 {  
 	if(pRoot == NULL || k < 1)
 		return 0;
@@ -377,22 +385,22 @@ int BiTree<T>::LeafCount() const
 
 //求二叉树中叶子节点的个数
 template <typename T>
-int BiTree<T>::LeafCount(BiNode *root) const
+int BiTree<T>::LeafCount(BiNode<T> *pRoot) const
 {
-	if (root == NULL)
+	if (pRoot == NULL)
 	{
 		return 0;
 	}
-	if (root->LChild == NULL && root->RChild == NULL)
+	if (pRoot->LChild == NULL && pRoot->RChild == NULL)
 	{
 		return 1;
 	}
-	return LeafCount(root->LChild) + LeafCount(root->RChild);
+	return LeafCount(pRoot->LChild) + LeafCount(pRoot->RChild);
 }
 
 
 template <typename T>
-bool BiTree<T>::StructureCmp(BiNode *pRoot2) const
+bool BiTree<T>::StructureCmp(BiNode<T> *pRoot2) const
 {
 	return StructureCmp(root, pRoot2);
 }
@@ -404,7 +412,7 @@ bool BiTree<T>::StructureCmp(BiNode *pRoot2) const
 //	（2）如果两棵二叉树一棵为空，另一棵不为空，返回假
 //	（3）如果两棵二叉树都不为空，如果对应的左子树和右子树都同构返回真，其他返回假
 template <typename T>
-bool BiTree<T>::StructureCmp(BiNode *pRoot1, BiNode *pRoot2) const
+bool BiTree<T>::StructureCmp(BiNode<T> *pRoot1, BiNode<T> *pRoot2) const
 {
 	if (pRoot1 == NULL && pRoot2 == NULL)
 	{
@@ -427,17 +435,17 @@ bool BiTree<T>::IsBalanceBiTree() const
 
 //判断二叉树是不是平衡二叉树
 template <typename T>
-bool BiTree<T>::IsBalanceBiTree(BiNode *root, int &height) const
+bool BiTree<T>::IsBalanceBiTree(BiNode<T> *pRoot, int &height) const
 {
-	if (root == NULL)
+	if (pRoot == NULL)
 	{	
 		height = 0;
 		return true;
 	}
 	int LHeight, RHeight;
 
-	bool Lbal = IsBalanceBiTree(root->LChild, LHeight);
-	bool Rbal = IsBalanceBiTree(root->RChild, RHeight);
+	bool Lbal = IsBalanceBiTree(pRoot->LChild, LHeight);
+	bool Rbal = IsBalanceBiTree(pRoot->RChild, RHeight);
 	height = (LHeight > RHeight ? LHeight : RHeight) + 1;
 
 	if (Lbal && Rbal && abs(LHeight - RHeight) <= 1)
@@ -456,20 +464,20 @@ void BiTree<T>::BiTreeMirror()
 
 //求二叉树的镜像
 template <typename T>
-void BiTree<T>::BiTreeMirror(BiNode *&root)
+void BiTree<T>::BiTreeMirror(BiNode<T> *&pRoot)
 {
-	if (root == NULL)
+	if (pRoot == NULL)
 	{
 		return;
 	}
 
 	BiNode *tmp = NULL;
-	tmp = root->LChild;
-	root->LChild = root->RChild;
-	root->RChild = tmp;
+	tmp = pRoot->LChild;
+	pRootpRootLChild = pRoot->RChild;
+	pRoot->RChild = tmp;
 
-	BiTreeMirror(root->LChild);
-	BiTreeMirror(root->RChild);
+	BiTreeMirror(pRoot->LChild);
+	BiTreeMirror(pRoot->RChild);
 }
 
 //求二叉树中节点的最大距离
@@ -485,7 +493,7 @@ int BiTree<T>::GetMaxDistance() const
 //求二叉树中节点的最大距离
 //即二叉树中相距最远的两个节点之间的距离。先求左子树和右子树分别的最大值。
 template <typename T>
-void BiTree<T>::GetMaxDistance(BiNode *pRoot, int &Left_max, int &Right_max) const
+void BiTree<T>::GetMaxDistance(BiNode<T> *pRoot, int &Left_max, int &Right_max) const
 {
 	int L_maxLeft, L_maxRight, R_maxLeft, R_maxRight;
 	if (pRoot->LChild == NULL && pRoot->RChild == NULL)
@@ -516,10 +524,106 @@ void BiTree<T>::GetMaxDistance(BiNode *pRoot, int &Left_max, int &Right_max) con
 	}
 }
 
-template <typename T>
-bool BiTree<T>::IsCompleteBinaryTree(BiNode * pRoot) const
-{
 
+template <typename T>
+bool BiTree<T>::IsCompleteBinaryTree() const
+{
+	return IsCompleteBinaryTree(root);
+}
+
+//判断二叉树是不是完全二叉树
+//若设二叉树的深度为h，除第 h 层外，其它各层 (1～h-1) 的结点数都达到最大个数，第 h 层所有的结点都连续集中在最左边，这就是完全二叉树。
+//	有如下算法，按层次（从上到下，从左到右）遍历二叉树，当遇到一个节点的左子树为空时，则该节点右子树必须为空，且后面遍历的节点左右子树都必须为空，否则不是完全二叉树。
+template <typename T>
+bool BiTree<T>::IsCompleteBinaryTree(BiNode<T> *pRoot) const
+{
+	if (pRoot == NULL)
+	{
+		return true;
+	}
+
+	bool MustHasNoChild = false;
+	queue<BiNode<T>> q;
+	q.push(*pRoot);
+	while(!q.empty())
+	{
+		BiNode<T> Cur = q.front();
+		q.pop();
+		if (MustHasNoChild)
+		{
+			if (Cur.LChild != NULL || Cur.RChild != NULL)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (Cur.LChild != NULL && Cur.RChild != NULL)
+			{
+				q.push(*(Cur.LChild));
+				q.push(*(Cur.RChild));
+			} 
+			else if(Cur.LChild != NULL && Cur.RChild == NULL)
+			{
+				MustHasNoChild = true;
+				q.push(*(Cur.LChild));
+			}
+			else if (Cur.LChild == NULL && Cur.RChild == NULL)
+			{
+				MustHasNoChild = true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+
+
+
+//由前序遍历序列和中序遍历序列重建二叉树
+//	二叉树前序遍历序列中，第一个元素总是树的根节点的值。中序遍历序列中，左子树的节点的值位于根节点的值的左边，右子树的节点的值位于根节点的值的右边。
+template <typename T>
+void BiTree<T>::CreatBiTreeByPre_In(int PreList[], int InList[], int num, BiNode<T> **biNode)
+{
+	int LLen = 0;
+	while(InList[LLen] != PreList[0]){LLen++;}//求前序遍历序列的第一个节点在中序遍历序列中的位置
+
+	//求左、右子树的前序遍历数组
+	int LPreList[] = new int[LLen];
+	int RPreList[] = new int[num - LLen - 1];
+	int i = 1;
+	while(i < LLen + 1){LPreList[i] = PreList[i - 1];}
+	i = LLen + 1;
+	while(i < num - 1){RPreList[i] = PreList[i];}
+
+	//求右子树前序、中序遍历数组
+	int LInList[] = new int[LLen];
+	int RInList[] = new int[num - Ln - 1];
+	i = 0;
+	while(i < LLen){LInList[i] = InList[i];}
+	i = LLen + 1;
+	while(i < num - 1){RInList[i] = InList[i];}
+
+	BiNode *LChild = NULL;
+	BiNode *RChild = NULL;
+
+	BiNode* biNode = new BiNode(0, NULL, NULL);
+	biNode->k_data = PreList[0];
+	CreatBiTreeByPre_In(LPreList, LInList, LLen, &LChild);
+	biNode->LChild = LChild;
+	CreatBiTreeByPre_In(RPreList, RInList, num - LLen - 1, &RChild);
+	biNode->RChild = RChild;
+
+	delete[] LPreList;
+	delete[] RPreList;
+	delete[] LInList;
+	delete[] RInList;
+
+	return biNode;
 }
 
 
@@ -527,15 +631,15 @@ void main()
 {
 	BiTree<int> *p_BiTree = new BiTree<int>();
 	cout<<"前序遍历：";
-	p_BiTree->VisitBiTreePreOrder();
+	p_BiTree->VisitBiTreePreOrder(PrintNode);
 	cout<<endl;
 
 	cout<<"中序遍历：";
-	p_BiTree->VisitBiTreeInOrder();
+	p_BiTree->VisitBiTreeInOrder(PrintNode);
 	cout<<endl;
 
 	cout<<"后序遍历：";
-	p_BiTree->VisitBiTreePostOrder();
+	p_BiTree->VisitBiTreePostOrder(PrintNode);
 	cout<<endl;
 
 	cout<<"节点数："<<p_BiTree->NodeCount1();
@@ -588,10 +692,10 @@ void main()
 		cout<<"请输入树2："<<endl;
 		BiTree<int> *p_BiTree2 = new BiTree<int>();
 		cout<<"前序遍历：";
-		p_BiTree2->VisitBiTreePreOrder();
+		p_BiTree2->VisitBiTreePreOrder(PrintNode);
 		cout<<endl;
 	
-		BiTree<int>::BiNode *p_Node = new BiTree<int>::BiNode(0, NULL, NULL);
+		BiNode<int> *p_Node = new BiNode<int>(0, NULL, NULL);
 		p_BiTree2->GetRoot(&p_Node);
 		cout<<"两树结构相同吗？"<<p_BiTree->StructureCmp(p_Node)<<endl;
 		delete p_BiTree2;
@@ -602,19 +706,27 @@ void main()
 	//p_BiTree->BiTreeMirror();
 
 	cout<<"前序遍历：";
-	p_BiTree->VisitBiTreePreOrder();
+	p_BiTree->VisitBiTreePreOrder(PrintNode);
 	cout<<endl;
 
 	cout<<"中序遍历：";
-	p_BiTree->VisitBiTreeInOrder();
+	p_BiTree->VisitBiTreeInOrder(PrintNode);
 	cout<<endl;
 
 	cout<<"后序遍历：";
-	p_BiTree->VisitBiTreePostOrder();
+	p_BiTree->VisitBiTreePostOrder(PrintNode);
 	cout<<endl;
 
 	cout<<"最大距离为："<<p_BiTree->GetMaxDistance()<<endl;
 
+	cout<<"是否是完全二叉树："<<p_BiTree->IsCompleteBinaryTree()<<endl;
+
+	//BiNode *BuildedTree;
+	//p_BiTree->CreatBiTreeByPre_In();
+
+
 	delete p_BiTree;
+
+
 	system("pause");
 }
