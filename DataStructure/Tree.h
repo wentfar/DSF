@@ -10,11 +10,11 @@ struct BiNode{
 //定义树节点以及树
 template <typename T>
 class BiTree{
+//公有函数
 public:
 	BiTree();
 	~BiTree();
 	void GetRoot(BiNode<T> **pRoot) const;
-	void PrintNode(BiNode<T> node);
 	void VisitBiTreePreOrder(void(*Visit)(BiNode<T>)) const;
 	void VisitBiTreeInOrder(void(*Visit)(BiNode<T>)) const;
 	void VisitBiTreePostOrder(void(*Visit)(BiNode<T>)) const;
@@ -22,8 +22,8 @@ public:
 	int NodeCount2() const;
 	int TreeDepth() const;
 	void LevelTravel() const;
-	void Convert1(BiNode<T> **pFirstNode, BiNode<T> **pLastNode);
-	void Convert2(BiNode<T> **pFirstNode, BiNode<T> **pLastNode);
+	void ConvertBiDirList1(BiNode<T> **pFirstNode, BiNode<T> **pLastNode);
+	void ConvertBiDirList2(BiNode<T> **pFirstNode, BiNode<T> **pLastNode);
 	int GetNodeNumKthLevel1(int k) const;
 	int GetNodeNumKthLevel2(int k) const;
 	int LeafCount() const;
@@ -32,8 +32,9 @@ public:
 	void BiTreeMirror();
 	int GetMaxDistance() const;
 	bool IsCompleteBinaryTree() const;
-	void CreatBiTreeByPre_In(int PreList[], int InList[], int num, BiNode<T> **biNode);
+	void CreatBiTreeByPre_In(const T PreList[], const T InList[], const int num, BiNode<T> **biNode);
 
+//辅助函数
 private:
 	void CreatBiTree(BiNode<T> **pRoot);
 	void ReleaseBiTree(BiNode<T> **pRoot);
@@ -44,8 +45,8 @@ private:
 	int NodeCount2(BiNode<T> *pRoot) const;
 	int TreeDepth(BiNode<T> *pRoot) const;
 	void LevelTravel(BiNode<T> *pRoot) const;
-	void Convert1(BiNode<T> *pRoot, BiNode<T> **pre);
-	void Convert2(BiNode<T> *pRoot, BiNode<T> **pFirstNode, BiNode<T> **pLastNode);
+	void ConvertBiDirList1(BiNode<T> *pRoot, BiNode<T> **pre);
+	void ConvertBiDirList2(BiNode<T> *pRoot, BiNode<T> **pFirstNode, BiNode<T> **pLastNode);
 	int GetNodeNumKthLevel2(BiNode<T> *pRoot, int k) const;
 	int LeafCount(BiNode<T> *pRoot) const;
 	bool StructureCmp(BiNode<T> *pRoot1, BiNode<T> *pRoot2) const;

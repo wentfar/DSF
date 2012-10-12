@@ -1,8 +1,12 @@
 #include <iostream>
 #include "Tree.h"
 #include <queue>
+#include <deque>
 
 using namespace std;
+
+
+deque<int> DequePreOrder, DequeInOrder;
 
 template <typename T>
 BiTree<T>::BiTree()
@@ -54,30 +58,43 @@ void BiTree<T>::ReleaseBiTree(BiNode<T> **pRoot)
 	}
 }
 
+//»ñÈ¡¸ù½Úµã
 template <typename T>
 void BiTree<T>::GetRoot(BiNode<T> **pRoot) const
 {
 	*pRoot = root;
 }
 
+//´òÓ¡½Úµã
 template <typename T>
 void PrintNode(BiNode<T> node)
 {
 	cout<<node.k_data<<" ";
 }
 
+//°´ÏÈĞò´æ´¢½Úµã
+template <typename T>
+void StoreNodePreOrder(BiNode<T> node)
+{
+	DequePreOrder.push_back(node.k_data);//È«¾Ö±äÁ¿
+}
+
+//°´ÖĞĞò´æ´¢½Úµã
+template <typename T>
+void StoreNodeInOrder(BiNode<T> node)
+{
+	DequeInOrder.push_back(node.k_data);//È«¾Ö±äÁ¿
+}
 
 //±éÀú¶ş²æÊ÷
 template <typename T>
-void BiTree<T>::VisitBiTreePreOrder(void(*Visit)(BiNode<T> node)) const
+void BiTree<T>::VisitBiTreePreOrder(void(*Visit)(BiNode<T>)) const
 {
 	VisitBiTreePreOrder(root, Visit);
 }
 
-
-//±éÀú¶ş²æÊ÷
 template <typename T>
-void BiTree<T>::VisitBiTreePreOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> node)) const
+void BiTree<T>::VisitBiTreePreOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T>)) const
 {
 	if (pRoot != NULL)
 	{
@@ -88,13 +105,13 @@ void BiTree<T>::VisitBiTreePreOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> nod
 }
 
 template <typename T>
-void BiTree<T>::VisitBiTreeInOrder(void(*Visit)(BiNode<T> node)) const
+void BiTree<T>::VisitBiTreeInOrder(void(*Visit)(BiNode<T>)) const
 {
 	VisitBiTreeInOrder(root, Visit);
 }
 
 template <typename T>
-void BiTree<T>::VisitBiTreeInOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> node)) const
+void BiTree<T>::VisitBiTreeInOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T>)) const
 {
 	if (pRoot != NULL)
 	{
@@ -105,13 +122,13 @@ void BiTree<T>::VisitBiTreeInOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> node
 }
 
 template <typename T>
-void BiTree<T>::VisitBiTreePostOrder(void(*Visit)(BiNode<T> node)) const
+void BiTree<T>::VisitBiTreePostOrder(void(*Visit)(BiNode<T>)) const
 {
 	VisitBiTreePostOrder(root, Visit);
 }
 
 template <typename T>
-void BiTree<T>::VisitBiTreePostOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> node)) const
+void BiTree<T>::VisitBiTreePostOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T>)) const
 {
 	if (pRoot != NULL)
 	{
@@ -121,7 +138,7 @@ void BiTree<T>::VisitBiTreePostOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T> no
 	} 
 }
 
-//¶ş²æÊ÷µÄ½áµã¼ÆÊı(1)
+//¶ş²æÊ÷µÄ½áµã¼ÆÊı¡£·½·¨(1)±éÀúÒ»±é¼´¿ÉµÃµ½¡£
 template <typename T>
 int BiTree<T>::NodeCount1() const
 {
@@ -130,7 +147,6 @@ int BiTree<T>::NodeCount1() const
 	return n;
 }
 
-//¶ş²æÊ÷µÄ½áµã¼ÆÊı¡£±éÀúÒ»±é¼´¿ÉµÃµ½¡£
 template <typename T>
 void BiTree<T>::NodeCount1(BiNode<T> *pRoot, int* count) const
 {
@@ -142,14 +158,13 @@ void BiTree<T>::NodeCount1(BiNode<T> *pRoot, int* count) const
 	} 
 }
 
-//¶ş²æÊ÷µÄ½áµã¼ÆÊı(2)
+//¶ş²æÊ÷µÄ½áµã¼ÆÊı¡£·½·¨(2)Èç¹û¶ş²æÊ÷²»Îª¿Õ£¬¶ş²æÊ÷½Úµã¸öÊı = ×ó×ÓÊ÷½Úµã¸öÊı + ÓÒ×ÓÊ÷½Úµã¸öÊı + 1¡£
 template <typename T>
 int BiTree<T>::NodeCount2() const
 {
 	return NodeCount2(root);
 }
 
-//¶ş²æÊ÷µÄ½áµã¼ÆÊı¡£Èç¹û¶ş²æÊ÷²»Îª¿Õ£¬¶ş²æÊ÷½Úµã¸öÊı = ×ó×ÓÊ÷½Úµã¸öÊı + ÓÒ×ÓÊ÷½Úµã¸öÊı + 1¡£
 template <typename T>
 int BiTree<T>::NodeCount2(BiNode<T> *pRoot) const
 {
@@ -185,14 +200,13 @@ int BiTree<T>::TreeDepth(BiNode<T> *pRoot) const
 	}
 }
 
-//·Ö²ã±éÀú¶ş²æÊ÷
+//·Ö²ã±éÀú¶ş²æÊ÷£¨°´²ã´Î´ÓÉÏÍùÏÂ£¬´Ó×óÍùÓÒ£©
 template <typename T>
 void BiTree<T>::LevelTravel() const
 {
 	LevelTravel(root);
 }
 
-//·Ö²ã±éÀú¶ş²æÊ÷£¨°´²ã´Î´ÓÉÏÍùÏÂ£¬´Ó×óÍùÓÒ£©
 template <typename T>
 void BiTree<T>::LevelTravel(BiNode<T> *pRoot) const
 {
@@ -214,22 +228,22 @@ void BiTree<T>::LevelTravel(BiNode<T> *pRoot) const
 	}
 }
 
-//½«¶ş²æ²éÕÒÊ÷±äÎªÓĞĞòµÄË«ÏòÁ´±í£¬ÒªÇó²»ÄÜ´´½¨ĞÂ½Úµã£¬Ö»µ÷ÕûÖ¸Õë¡£
+//½«¶ş²æ²éÕÒÊ÷±äÎªÓĞĞòµÄË«ÏòÁ´±í£¬ÒªÇó²»ÄÜ´´½¨ĞÂ½Úµã£¬Ö»µ÷ÕûÖ¸Õë¡£·½·¨(1)¡£
 //pFirstNode: ×ª»»ºóË«ÏòÓĞĞòÁ´±íµÄµÚÒ»¸ö½ÚµãÖ¸Õë
 //pLastNode: ×ª»»ºóË«ÏòÓĞĞòÁ´±íµÄ×îºóÒ»¸ö½ÚµãÖ¸Õë
 template <typename T>
-void BiTree<T>::Convert1(BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
+void BiTree<T>::ConvertBiDirList1(BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
 {
 	if (root == NULL)
 	{
 		return;
 	}
 
-	BiNode *pre = NULL;
-	Convert1(root, &pre);
+	BiNode<T> *pre = NULL;
+	ConvertBiDirList1(root, &pre);
 
 	//¶¨Î»Í·½áµãºÍÎ²½áµã
-	BiNode *p = root;
+	BiNode<T> *p = root;
 	while(p->LChild != NULL)
 	{
 		p = p->LChild;
@@ -245,13 +259,13 @@ void BiTree<T>::Convert1(BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
 }
 
 template <typename T>
-void BiTree<T>::Convert1(BiNode<T> *pRoot, BiNode<T> **pre)//ÊµÖÊÎªÖĞĞò±éÀú¶ş²æ²éÕÒÊ÷£¬ÆäÖĞÉèÖÃÒ»¸öpreÖ¸ÕëÖ¸ÏòÉÏÒ»¸ö½Úµã¡£×¢ÒâpreÎªÒıÓÃÀàĞÍ¡£
+void BiTree<T>::ConvertBiDirList1(BiNode<T> *pRoot, BiNode<T> **pre)//ÊµÖÊÎªÖĞĞò±éÀú¶ş²æ²éÕÒÊ÷£¬ÆäÖĞÉèÖÃÒ»¸öpreÖ¸ÕëÖ¸ÏòÉÏÒ»¸ö½Úµã¡£×¢ÒâpreÎªÒıÓÃÀàĞÍ¡£
 {
 	if (pRoot != NULL)
 	{
 		bool flag_pre = false;
 		bool flag_p = false;
-		Convert1(pRoot->LChild, pre);
+		ConvertBiDirList1(pRoot->LChild, pre);
 		
 		//ÏßË÷»¯
 		if (*pre != NULL && (*pre)->RChild == NULL) {(*pre)->RChild = pRoot; flag_pre = true;}
@@ -263,11 +277,11 @@ void BiTree<T>::Convert1(BiNode<T> *pRoot, BiNode<T> **pre)//ÊµÖÊÎªÖĞĞò±éÀú¶ş²æ²
 
 		*pre = pRoot;//¸üĞÂpre
 
-		Convert1(pRoot->RChild, pre);
+		ConvertBiDirList1(pRoot->RChild, pre);
 	}
 }
 
-//½«¶ş²æ²éÕÒÊ÷±äÎªÓĞĞòµÄË«ÏòÁ´±í£¬ÒªÇó²»ÄÜ´´½¨ĞÂ½Úµã£¬Ö»µ÷ÕûÖ¸Õë¡£
+//½«¶ş²æ²éÕÒÊ÷±äÎªÓĞĞòµÄË«ÏòÁ´±í£¬ÒªÇó²»ÄÜ´´½¨ĞÂ½Úµã£¬Ö»µ÷ÕûÖ¸Õë¡£·½·¨(2)¡£
 //µİ¹é½â·¨£º
 //£¨1£©Èç¹û¶ş²æÊ÷²éÕÒÊ÷Îª¿Õ£¬²»ĞèÒª×ª»»£¬¶ÔÓ¦Ë«ÏòÁ´±íµÄµÚÒ»¸ö½ÚµãÊÇNULL£¬×îºóÒ»¸ö½ÚµãÊÇNULL
 //£¨2£©Èç¹û¶ş²æ²éÕÒÊ÷²»Îª¿Õ£º
@@ -276,27 +290,27 @@ void BiTree<T>::Convert1(BiNode<T> *pRoot, BiNode<T> **pre)//ÊµÖÊÎªÖĞĞò±éÀú¶ş²æ²
 //	Èç¹ûÓÒ×ÓÊ÷Îª¿Õ£¬¶ÔÓ¦Ë«ÏòÓĞĞòÁ´±íµÄ×îºóÒ»¸ö½ÚµãÊÇ¸ù½Úµã£¬ÓÒ±ß²»ĞèÒªÆäËû²Ù×÷£»
 //	Èç¹ûÓÒ×ÓÊ÷²»Îª¿Õ£¬¶ÔÓ¦Ë«ÏòÓĞĞòÁ´±íµÄ×îºóÒ»¸ö½Úµã¾ÍÊÇÓÒ×ÓÊ÷×ª»»ºóË«ÏòÓĞĞòÁ´±íµÄ×îºóÒ»¸ö½Úµã£¬Í¬Ê±½«¸ù½ÚµãºÍÓÒ×ÓÊ÷×ª»»ºóµÄË«ÏòÓĞĞòÁ´±íµÄµÚÒ»¸ö½ÚµãÁ¬½Ó¡£
 template <typename T>
-void BiTree<T>::Convert2(BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
+void BiTree<T>::ConvertBiDirList2(BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
 {
-	Convert2(root, pFirstNode, pLastNode);
+	ConvertBiDirList2(root, pFirstNode, pLastNode);
 }
 
 template <typename T>
-void BiTree<T>::Convert2(BiNode<T> *pRoot, BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
+void BiTree<T>::ConvertBiDirList2(BiNode<T> *pRoot, BiNode<T> **pFirstNode, BiNode<T> **pLastNode)
 {
 	if (pRoot == NULL)
 	{
 		*pFirstNode = NULL;
 		*pLastNode = NULL;
 	}
-	BiNode *pLeftFirst, *pLeftLast, *pRightFirst, *pRightLast;  
+	BiNode<T> *pLeftFirst, *pLeftLast, *pRightFirst, *pRightLast;  
 	if (pRoot->LChild == NULL)//´¦Àí×ó×ÓÊ÷
 	{
 		*pFirstNode = pRoot;
 	}
 	else
 	{
-		Convert2(pRoot->LChild, &pLeftFirst, &pLeftLast);
+		ConvertBiDirList2(pRoot->LChild, &pLeftFirst, &pLeftLast);
 		*pFirstNode = pLeftFirst;
 
 		pLeftLast->RChild = pRoot;
@@ -309,15 +323,15 @@ void BiTree<T>::Convert2(BiNode<T> *pRoot, BiNode<T> **pFirstNode, BiNode<T> **p
 	}
 	else
 	{
-		Convert2(root->RChild, &pRightFirst, &pRightLast);
+		ConvertBiDirList2(pRoot->RChild, &pRightFirst, &pRightLast);
 		*pLastNode = pRightLast;
 
-		root->RChild = pRightFirst;
+		pRoot->RChild = pRightFirst;
 		pRightFirst->LChild = pRoot;
 	}
 }
 
-//Çó¶ş²æÊ÷µÚK²ãµÄ½Úµã¸öÊı
+//Çó¶ş²æÊ÷µÚK²ãµÄ½Úµã¸öÊı¡£·½·¨(1)¡£
 template <typename T>
 int BiTree<T>::GetNodeNumKthLevel1(int k) const
 {
@@ -327,11 +341,11 @@ int BiTree<T>::GetNodeNumKthLevel1(int k) const
 	}
 	else
 	{
-		queue<BiNode> q;
+		queue<BiNode<T>> q;
 		q.push(*root);	
 		while (--k)//±éÀúÇ°k-1²ã
 		{
-			queue<BiNode> q_NextLayer;//Çå¿ÕÔİ´æ¶ÓÁĞ
+			queue<BiNode<T>> q_NextLayer;//Çå¿ÕÔİ´æ¶ÓÁĞ
 			while(!q.empty())//±éÀúÆäÖĞÒ»²ã
 			{
 				if (q.front().LChild != NULL)
@@ -351,7 +365,7 @@ int BiTree<T>::GetNodeNumKthLevel1(int k) const
 	}
 }
 
-//Çó¶ş²æÊ÷µÚK²ãµÄ½Úµã¸öÊı
+//Çó¶ş²æÊ÷µÚK²ãµÄ½Úµã¸öÊı¡£·½·¨(2)¡£
 template <typename T>
 int BiTree<T>::GetNodeNumKthLevel2(int k) const
 {
@@ -383,7 +397,6 @@ int BiTree<T>::LeafCount() const
 	return LeafCount(root);
 }
 
-//Çó¶ş²æÊ÷ÖĞÒ¶×Ó½ÚµãµÄ¸öÊı
 template <typename T>
 int BiTree<T>::LeafCount(BiNode<T> *pRoot) const
 {
@@ -398,19 +411,18 @@ int BiTree<T>::LeafCount(BiNode<T> *pRoot) const
 	return LeafCount(pRoot->LChild) + LeafCount(pRoot->RChild);
 }
 
-
-template <typename T>
-bool BiTree<T>::StructureCmp(BiNode<T> *pRoot2) const
-{
-	return StructureCmp(root, pRoot2);
-}
-
 //ÅĞ¶ÏÁ½¿Ã¶ş²æÊ÷ÊÇ·ñ½á¹¹ÏàÍ¬
 //	²»¿¼ÂÇÊı¾İÄÚÈİ¡£½á¹¹ÏàÍ¬ÒâÎ¶×Å¶ÔÓ¦µÄ×ó×ÓÊ÷ºÍ¶ÔÓ¦µÄÓÒ×ÓÊ÷¶¼½á¹¹ÏàÍ¬¡£
 //	µİ¹é½â·¨£º
 //	£¨1£©Èç¹ûÁ½¿Ã¶ş²æÊ÷¶¼Îª¿Õ£¬·µ»ØÕæ
 //	£¨2£©Èç¹ûÁ½¿Ã¶ş²æÊ÷Ò»¿ÃÎª¿Õ£¬ÁíÒ»¿Ã²»Îª¿Õ£¬·µ»Ø¼Ù
 //	£¨3£©Èç¹ûÁ½¿Ã¶ş²æÊ÷¶¼²»Îª¿Õ£¬Èç¹û¶ÔÓ¦µÄ×ó×ÓÊ÷ºÍÓÒ×ÓÊ÷¶¼Í¬¹¹·µ»ØÕæ£¬ÆäËû·µ»Ø¼Ù
+template <typename T>
+bool BiTree<T>::StructureCmp(BiNode<T> *pRoot2) const
+{
+	return StructureCmp(root, pRoot2);
+}
+
 template <typename T>
 bool BiTree<T>::StructureCmp(BiNode<T> *pRoot1, BiNode<T> *pRoot2) const
 {
@@ -433,7 +445,6 @@ bool BiTree<T>::IsBalanceBiTree() const
 	return IsBalanceBiTree(root, height);
 }
 
-//ÅĞ¶Ï¶ş²æÊ÷ÊÇ²»ÊÇÆ½ºâ¶ş²æÊ÷
 template <typename T>
 bool BiTree<T>::IsBalanceBiTree(BiNode<T> *pRoot, int &height) const
 {
@@ -462,7 +473,6 @@ void BiTree<T>::BiTreeMirror()
 	BiTreeMirror(root);
 }
 
-//Çó¶ş²æÊ÷µÄ¾µÏñ
 template <typename T>
 void BiTree<T>::BiTreeMirror(BiNode<T> *&pRoot)
 {
@@ -471,9 +481,9 @@ void BiTree<T>::BiTreeMirror(BiNode<T> *&pRoot)
 		return;
 	}
 
-	BiNode *tmp = NULL;
+	BiNode<T> *tmp = NULL;
 	tmp = pRoot->LChild;
-	pRootpRootLChild = pRoot->RChild;
+	pRoot->LChild = pRoot->RChild;
 	pRoot->RChild = tmp;
 
 	BiTreeMirror(pRoot->LChild);
@@ -481,7 +491,7 @@ void BiTree<T>::BiTreeMirror(BiNode<T> *&pRoot)
 }
 
 //Çó¶ş²æÊ÷ÖĞ½ÚµãµÄ×î´ó¾àÀë
-//¼´¶ş²æÊ÷ÖĞÏà¾à×îÔ¶µÄÁ½¸ö½ÚµãÖ®¼äµÄ¾àÀë¡£
+//¼´¶ş²æÊ÷ÖĞÏà¾à×îÔ¶µÄÁ½¸ö½ÚµãÖ®¼äµÄ¾àÀë¡£ÏÈÇó×ó×ÓÊ÷ºÍÓÒ×ÓÊ÷·Ö±ğµÄ×î´óÖµ¡£
 template <typename T>
 int BiTree<T>::GetMaxDistance() const
 {
@@ -490,8 +500,6 @@ int BiTree<T>::GetMaxDistance() const
 	return Left_max + Right_max;
 }
 
-//Çó¶ş²æÊ÷ÖĞ½ÚµãµÄ×î´ó¾àÀë
-//¼´¶ş²æÊ÷ÖĞÏà¾à×îÔ¶µÄÁ½¸ö½ÚµãÖ®¼äµÄ¾àÀë¡£ÏÈÇó×ó×ÓÊ÷ºÍÓÒ×ÓÊ÷·Ö±ğµÄ×î´óÖµ¡£
 template <typename T>
 void BiTree<T>::GetMaxDistance(BiNode<T> *pRoot, int &Left_max, int &Right_max) const
 {
@@ -524,16 +532,15 @@ void BiTree<T>::GetMaxDistance(BiNode<T> *pRoot, int &Left_max, int &Right_max) 
 	}
 }
 
-
+//ÅĞ¶Ï¶ş²æÊ÷ÊÇ²»ÊÇÍêÈ«¶ş²æÊ÷
+//ÈôÉè¶ş²æÊ÷µÄÉî¶ÈÎªh£¬³ıµÚ h ²ãÍâ£¬ÆäËü¸÷²ã (1¡«h-1) µÄ½áµãÊı¶¼´ïµ½×î´ó¸öÊı£¬µÚ h ²ãËùÓĞµÄ½áµã¶¼Á¬Ğø¼¯ÖĞÔÚ×î×ó±ß£¬Õâ¾ÍÊÇÍêÈ«¶ş²æÊ÷¡£
+//	ÓĞÈçÏÂËã·¨£¬°´²ã´Î£¨´ÓÉÏµ½ÏÂ£¬´Ó×óµ½ÓÒ£©±éÀú¶ş²æÊ÷£¬µ±Óöµ½Ò»¸ö½ÚµãµÄ×ó×ÓÊ÷Îª¿ÕÊ±£¬Ôò¸Ã½ÚµãÓÒ×ÓÊ÷±ØĞëÎª¿Õ£¬ÇÒºóÃæ±éÀúµÄ½Úµã×óÓÒ×ÓÊ÷¶¼±ØĞëÎª¿Õ£¬·ñÔò²»ÊÇÍêÈ«¶ş²æÊ÷¡£
 template <typename T>
 bool BiTree<T>::IsCompleteBinaryTree() const
 {
 	return IsCompleteBinaryTree(root);
 }
 
-//ÅĞ¶Ï¶ş²æÊ÷ÊÇ²»ÊÇÍêÈ«¶ş²æÊ÷
-//ÈôÉè¶ş²æÊ÷µÄÉî¶ÈÎªh£¬³ıµÚ h ²ãÍâ£¬ÆäËü¸÷²ã (1¡«h-1) µÄ½áµãÊı¶¼´ïµ½×î´ó¸öÊı£¬µÚ h ²ãËùÓĞµÄ½áµã¶¼Á¬Ğø¼¯ÖĞÔÚ×î×ó±ß£¬Õâ¾ÍÊÇÍêÈ«¶ş²æÊ÷¡£
-//	ÓĞÈçÏÂËã·¨£¬°´²ã´Î£¨´ÓÉÏµ½ÏÂ£¬´Ó×óµ½ÓÒ£©±éÀú¶ş²æÊ÷£¬µ±Óöµ½Ò»¸ö½ÚµãµÄ×ó×ÓÊ÷Îª¿ÕÊ±£¬Ôò¸Ã½ÚµãÓÒ×ÓÊ÷±ØĞëÎª¿Õ£¬ÇÒºóÃæ±éÀúµÄ½Úµã×óÓÒ×ÓÊ÷¶¼±ØĞëÎª¿Õ£¬·ñÔò²»ÊÇÍêÈ«¶ş²æÊ÷¡£
 template <typename T>
 bool BiTree<T>::IsCompleteBinaryTree(BiNode<T> *pRoot) const
 {
@@ -581,49 +588,43 @@ bool BiTree<T>::IsCompleteBinaryTree(BiNode<T> *pRoot) const
 	return true;
 }
 
-
-
-
 //ÓÉÇ°Ğò±éÀúĞòÁĞºÍÖĞĞò±éÀúĞòÁĞÖØ½¨¶ş²æÊ÷
 //	¶ş²æÊ÷Ç°Ğò±éÀúĞòÁĞÖĞ£¬µÚÒ»¸öÔªËØ×ÜÊÇÊ÷µÄ¸ù½ÚµãµÄÖµ¡£ÖĞĞò±éÀúĞòÁĞÖĞ£¬×ó×ÓÊ÷µÄ½ÚµãµÄÖµÎ»ÓÚ¸ù½ÚµãµÄÖµµÄ×ó±ß£¬ÓÒ×ÓÊ÷µÄ½ÚµãµÄÖµÎ»ÓÚ¸ù½ÚµãµÄÖµµÄÓÒ±ß¡£
 template <typename T>
-void BiTree<T>::CreatBiTreeByPre_In(int PreList[], int InList[], int num, BiNode<T> **biNode)
+void BiTree<T>::CreatBiTreeByPre_In(const T* PreList, const T* InList, const int num, BiNode<T> **biNode)
 {
 	int LLen = 0;
 	while(InList[LLen] != PreList[0]){LLen++;}//ÇóÇ°Ğò±éÀúĞòÁĞµÄµÚÒ»¸ö½ÚµãÔÚÖĞĞò±éÀúĞòÁĞÖĞµÄÎ»ÖÃ
 
 	//Çó×ó¡¢ÓÒ×ÓÊ÷µÄÇ°Ğò±éÀúÊı×é
-	int LPreList[] = new int[LLen];
-	int RPreList[] = new int[num - LLen - 1];
+	int *LPreList = new int[LLen];
+	int *RPreList = new int[num - LLen - 1];
 	int i = 1;
 	while(i < LLen + 1){LPreList[i] = PreList[i - 1];}
 	i = LLen + 1;
 	while(i < num - 1){RPreList[i] = PreList[i];}
 
 	//ÇóÓÒ×ÓÊ÷Ç°Ğò¡¢ÖĞĞò±éÀúÊı×é
-	int LInList[] = new int[LLen];
-	int RInList[] = new int[num - Ln - 1];
+	int *LInList = new int[LLen];
+	int *RInList = new int[num - LLen - 1];
 	i = 0;
 	while(i < LLen){LInList[i] = InList[i];}
 	i = LLen + 1;
 	while(i < num - 1){RInList[i] = InList[i];}
 
-	BiNode *LChild = NULL;
-	BiNode *RChild = NULL;
+	BiNode<T> *LChild = NULL;
+	BiNode<T> *RChild = NULL;
 
-	BiNode* biNode = new BiNode(0, NULL, NULL);
-	biNode->k_data = PreList[0];
+	(*biNode)->k_data = PreList[0];
 	CreatBiTreeByPre_In(LPreList, LInList, LLen, &LChild);
-	biNode->LChild = LChild;
+	(*biNode)->LChild = LChild;
 	CreatBiTreeByPre_In(RPreList, RInList, num - LLen - 1, &RChild);
-	biNode->RChild = RChild;
+	(*biNode)->RChild = RChild;
 
 	delete[] LPreList;
 	delete[] RPreList;
 	delete[] LInList;
 	delete[] RInList;
-
-	return biNode;
 }
 
 
@@ -645,7 +646,7 @@ void main()
 	cout<<"½ÚµãÊı£º"<<p_BiTree->NodeCount1();
 	cout<<endl;
 
-	cout<<"½ÚµãÊı£º"<<p_BiTree->NodeCount1();
+	cout<<"½ÚµãÊı£º"<<p_BiTree->NodeCount2();
 	cout<<endl;
 
 	cout<<"Éî¶È£º"<<p_BiTree->TreeDepth();
@@ -655,13 +656,13 @@ void main()
 	p_BiTree->LevelTravel();
 	cout<<endl;
 
+	//½«¶ş²æÅÅĞòÊ÷×ª»»ÎªÓĞĞòÁ´±í
+	//BiNode<int> *pFirst = NULL;
+	//BiNode<int> *pLast = NULL;
+	////p_BiTree->ConvertBiDirList1(&pFirst, &pLast);
+	//p_BiTree->ConvertBiDirList2(&pFirst, &pLast);
 
-	//BiTree<int>::BiNode *pFirst = NULL;
-	//BiTree<int>::BiNode *pLast = NULL;
-	//p_BiTree->Convert1(&pFirst, &pLast);
-	//p_BiTree->Convert2(&pFirst, &pLast);
-
-	//BiTree<int>::BiNode *p = pFirst;
+	//BiNode<int> *p = pFirst;
 	//while(p != NULL)
 	//{
 	//	cout<<p->k_data<<" ";p = p->RChild;
@@ -681,7 +682,7 @@ void main()
 		cin.sync();
 		int k;
 		cin>>k;
-		//cout<<"µÚ"<<k<<"²ã½áµã¸öÊıÎª£º"<<p_BiTree->GetNodeNumKthLevel1(k)<<endl;
+		cout<<"µÚ"<<k<<"²ã½áµã¸öÊıÎª£º"<<p_BiTree->GetNodeNumKthLevel1(k)<<endl;
 		cout<<"µÚ"<<k<<"²ã½áµã¸öÊıÎª£º"<<p_BiTree->GetNodeNumKthLevel2(k)<<endl;
 	}
 
@@ -702,31 +703,42 @@ void main()
 	}
 
 	cout<<"¶ş²æÊ÷ÊÇ·ñÊÇÆ½ºâÊ÷£º"<<p_BiTree->IsBalanceBiTree()<<endl;
+	cout<<"ÊÇ·ñÊÇÍêÈ«¶ş²æÊ÷£º"<<p_BiTree->IsCompleteBinaryTree()<<endl;
+	cout<<"×î´ó¾àÀëÎª£º"<<p_BiTree->GetMaxDistance()<<endl;
 
 	//p_BiTree->BiTreeMirror();
 
-	cout<<"Ç°Ğò±éÀú£º";
-	p_BiTree->VisitBiTreePreOrder(PrintNode);
+	//cout<<"×÷¾µÏñºó£¬Ç°Ğò±éÀú£º";
+	//p_BiTree->VisitBiTreePreOrder(PrintNode);
+	//cout<<endl;
+
+	//cout<<"×÷¾µÏñºó£¬ÖĞĞò±éÀú£º";
+	//p_BiTree->VisitBiTreeInOrder(PrintNode);
+	//cout<<endl;
+
+	//cout<<"×÷¾µÏñºó£¬ºóĞò±éÀú£º";
+	//p_BiTree->VisitBiTreePostOrder(PrintNode);
+	//cout<<endl;
+
+	//cout<<"×÷¾µÏñºó£¬ÊÇ·ñÊÇÍêÈ«¶ş²æÊ÷£º"<<p_BiTree->IsCompleteBinaryTree()<<endl;
+
+	cout<<"°´Ç°Ğò´æ´¢½Úµã£º";
+	p_BiTree->VisitBiTreePreOrder(StoreNodePreOrder);
 	cout<<endl;
 
-	cout<<"ÖĞĞò±éÀú£º";
-	p_BiTree->VisitBiTreeInOrder(PrintNode);
+	cout<<"°´ÖĞĞò´æ´¢½Úµã£º";
+	p_BiTree->VisitBiTreeInOrder(StoreNodeInOrder);
 	cout<<endl;
 
-	cout<<"ºóĞò±éÀú£º";
-	p_BiTree->VisitBiTreePostOrder(PrintNode);
-	cout<<endl;
-
-	cout<<"×î´ó¾àÀëÎª£º"<<p_BiTree->GetMaxDistance()<<endl;
-
-	cout<<"ÊÇ·ñÊÇÍêÈ«¶ş²æÊ÷£º"<<p_BiTree->IsCompleteBinaryTree()<<endl;
-
-	//BiNode *BuildedTree;
-	//p_BiTree->CreatBiTreeByPre_In();
-
+	BiNode<int> *BuildedTree = new BiNode<int>(0, NULL, NULL);
+	int NodeNum = DequePreOrder.size();
+	int *PreOrder = new int[NodeNum];
+	for(int i = 0;i < NodeNum; i++){PreOrder[i] = DequePreOrder[i];}
+	int *InOrder = new int[NodeNum];
+	for(int i = 0;i < NodeNum; i++){InOrder[i] = DequeInOrder[i];}
+	p_BiTree->CreatBiTreeByPre_In(PreOrder, InOrder, NodeNum, &BuildedTree);
 
 	delete p_BiTree;
-
 
 	system("pause");
 }
