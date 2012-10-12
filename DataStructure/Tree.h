@@ -13,6 +13,7 @@ class BiTree{
 //公有函数
 public:
 	BiTree();
+	BiTree(BiNode<T> *pRoot);
 	~BiTree();
 	void GetRoot(BiNode<T> **pRoot) const;
 	void VisitBiTreePreOrder(void(*Visit)(BiNode<T>)) const;
@@ -32,7 +33,7 @@ public:
 	void BiTreeMirror();
 	int GetMaxDistance() const;
 	bool IsCompleteBinaryTree() const;
-	void CreatBiTreeByPre_In(const T PreList[], const T InList[], const int num, BiNode<T> **biNode);
+	void CreatBiTreeByPre_In(T *PreList, T *InList, int num, BiNode<T> **biNode);
 
 //辅助函数
 private:

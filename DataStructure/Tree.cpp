@@ -14,6 +14,12 @@ BiTree<T>::BiTree()
 	CreatBiTree(&root);
 }
 
+template <typename T>
+BiTree<T>::BiTree(BiNode<T> *pRoot)
+{
+	root = pRoot;
+}
+
 //创建二叉树
 template <typename T>
 void BiTree<T>::CreatBiTree(BiNode<T> **pRoot)
@@ -76,6 +82,7 @@ void PrintNode(BiNode<T> node)
 template <typename T>
 void StoreNodePreOrder(BiNode<T> node)
 {
+	cout<<node.k_data<<" ";
 	DequePreOrder.push_back(node.k_data);//全局变量
 }
 
@@ -83,6 +90,7 @@ void StoreNodePreOrder(BiNode<T> node)
 template <typename T>
 void StoreNodeInOrder(BiNode<T> node)
 {
+	cout<<node.k_data<<" ";
 	DequeInOrder.push_back(node.k_data);//全局变量
 }
 
@@ -591,40 +599,32 @@ bool BiTree<T>::IsCompleteBinaryTree(BiNode<T> *pRoot) const
 //由前序遍历序列和中序遍历序列重建二叉树
 //	二叉树前序遍历序列中，第一个元素总是树的根节点的值。中序遍历序列中，左子树的节点的值位于根节点的值的左边，右子树的节点的值位于根节点的值的右边。
 template <typename T>
-void BiTree<T>::CreatBiTreeByPre_In(const T* PreList, const T* InList, const int num, BiNode<T> **biNode)
+void BiTree<T>::CreatBiTreeByPre_In(T* PreList, T* InList, int num, BiNode<T> **biNode)
 {
+	if (num == 1)
+	{
+		*biNode = new BiNode<T>(PreList[0], NULL, NULL);
+		return;
+	}
+
 	int LLen = 0;
 	while(InList[LLen] != PreList[0]){LLen++;}//求前序遍历序列的第一个节点在中序遍历序列中的位置
 
-	//求左、右子树的前序遍历数组
-	int *LPreList = new int[LLen];
-	int *RPreList = new int[num - LLen - 1];
-	int i = 1;
-	while(i < LLen + 1){LPreList[i] = PreList[i - 1];}
-	i = LLen + 1;
-	while(i < num - 1){RPreList[i] = PreList[i];}
+	//左子树的前序和中序遍历
+	T *LPreList = PreList + 1;
+	T *LInList = InList;
 
-	//求右子树前序、中序遍历数组
-	int *LInList = new int[LLen];
-	int *RInList = new int[num - LLen - 1];
-	i = 0;
-	while(i < LLen){LInList[i] = InList[i];}
-	i = LLen + 1;
-	while(i < num - 1){RInList[i] = InList[i];}
+	//右子树的前序和中序遍历
+	T *RPreList = PreList +  LLen + 1;
+	T *RInList = InList + LLen + 1;
 
 	BiNode<T> *LChild = NULL;
 	BiNode<T> *RChild = NULL;
 
-	(*biNode)->k_data = PreList[0];
 	CreatBiTreeByPre_In(LPreList, LInList, LLen, &LChild);
-	(*biNode)->LChild = LChild;
 	CreatBiTreeByPre_In(RPreList, RInList, num - LLen - 1, &RChild);
-	(*biNode)->RChild = RChild;
 
-	delete[] LPreList;
-	delete[] RPreList;
-	delete[] LInList;
-	delete[] RInList;
+	*biNode = new BiNode<T>(PreList[0], LChild, RChild);
 }
 
 
@@ -634,18 +634,15 @@ void main()
 	cout<<"前序遍历：";
 	p_BiTree->VisitBiTreePreOrder(PrintNode);
 	cout<<endl;
-
 	cout<<"中序遍历：";
 	p_BiTree->VisitBiTreeInOrder(PrintNode);
 	cout<<endl;
-
 	cout<<"后序遍历：";
 	p_BiTree->VisitBiTreePostOrder(PrintNode);
 	cout<<endl;
 
 	cout<<"节点数："<<p_BiTree->NodeCount1();
 	cout<<endl;
-
 	cout<<"节点数："<<p_BiTree->NodeCount2();
 	cout<<endl;
 
@@ -699,6 +696,7 @@ void main()
 		BiNode<int> *p_Node = new BiNode<int>(0, NULL, NULL);
 		p_BiTree2->GetRoot(&p_Node);
 		cout<<"两树结构相同吗？"<<p_BiTree->StructureCmp(p_Node)<<endl;
+		delete p_Node;
 		delete p_BiTree2;
 	}
 
@@ -711,11 +709,9 @@ void main()
 	//cout<<"作镜像后，前序遍历：";
 	//p_BiTree->VisitBiTreePreOrder(PrintNode);
 	//cout<<endl;
-
 	//cout<<"作镜像后，中序遍历：";
 	//p_BiTree->VisitBiTreeInOrder(PrintNode);
 	//cout<<endl;
-
 	//cout<<"作镜像后，后序遍历：";
 	//p_BiTree->VisitBiTreePostOrder(PrintNode);
 	//cout<<endl;
@@ -737,6 +733,22 @@ void main()
 	int *InOrder = new int[NodeNum];
 	for(int i = 0;i < NodeNum; i++){InOrder[i] = DequeInOrder[i];}
 	p_BiTree->CreatBiTreeByPre_In(PreOrder, InOrder, NodeNum, &BuildedTree);
+
+	BiTree<int> *p_BiTree3 = new BiTree<int>(BuildedTree);
+
+	cout<<"BuildedTree前序遍历：";
+	p_BiTree3->VisitBiTreePreOrder(PrintNode);
+	cout<<endl;
+	cout<<"BuildedTree中序遍历：";
+	p_BiTree3->VisitBiTreeInOrder(PrintNode);
+	cout<<endl;
+	cout<<"BuildedTree后序遍历：";
+	p_BiTree3->VisitBiTreePostOrder(PrintNode);
+	cout<<endl;
+
+	delete BuildedTree;
+	delete PreOrder;
+	delete InOrder;
 
 	delete p_BiTree;
 
