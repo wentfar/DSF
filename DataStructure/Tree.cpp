@@ -601,6 +601,9 @@ bool BiTree<T>::IsCompleteBinaryTree(BiNode<T> *pRoot) const
 template <typename T>
 void BiTree<T>::CreatBiTreeByPre_In(T* PreList, T* InList, int num, BiNode<T> **biNode)
 {
+	if (num <= 0)
+		return; 
+
 	if (num == 1)
 	{
 		*biNode = new BiNode<T>(PreList[0], NULL, NULL);
@@ -754,3 +757,4 @@ void main()
 
 	system("pause");
 }
+
