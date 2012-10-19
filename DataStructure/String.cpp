@@ -1,190 +1,339 @@
+// Interview.cpp : 定义控制台应用程序的入口点。
+#include "string.h"
 #include <iostream>
-#include <string>
-#include "Definition.h"
-#define Max_Len 10
 
 using namespace std;
-int Next[Max_Len];
 
-typedef struct{
-	char * ch;
-	int length;
-}HString;
-
-
-
-char* strrev1(const char* str){
-	if(str==NULL) return NULL;
-	int len=strlen(str);
-	char* p=new char[len+1];
-	strcpy(p, str);
-	char tmp;
-	for(int i=0;i<len/2;i++){
-		tmp=p[i];
-		p[i]=p[len-1-i];
-		p[len-1-i]=tmp;
-	}
-	return p;
-}
-//不用中间变量
-char* strrev2(const char* str){
-	if(str==NULL) return NULL;
-	int len=strlen(str);
-	char* p=new char[len+1];
-	strcpy(p, str);
-	char* ret=p;
-	char* t = ret + len - 1;
-
-	while(p<t){
-		*p =*p+*t;
-		*t=*p-*t;
-		*p=*p-*t;
-		
-		p++;
-		t--;
-	}
-	return ret;
-}
-
-char* strrev3(const char* str){
-	if(str==NULL) return NULL;
-	int len=strlen(str);
-	char* p=new char[len+1];
-	strcpy(p, str);
-	char* ret=p;
-	char* t = ret + len - 1;
-
-	while(p<t){
-		*p=*p^*t;
-		*t=*p^*t;
-		*p=*p^*t;
-
-		p++;
-		t--;
-	}
-	return ret;
-}
-
-//递归写法
-char* strrev5(char* str, int len)//求s的逆串r
+//************************************
+// Method:    ItoA
+// Description:  Transfer an int to a string
+// Access:    public 
+// Returns:   void
+// Qualifier:
+// Parameter: int n
+// Parameter: char * str
+//************************************
+void ItoA(int n, char *str)
 {
-	if (len <= 1)
-		return str;
+	char num[256];
+	int k = n, i;
+	if (n<0) k = -n;
+		
+	for(i=0; k>0; i++)
+	{
+		num[i] = k%10 + '0';
+		k /= 10;
+	}
 
-	char t = *str;
-	*str = *(str + len -1);
-	*(str + len -1) = t;
 
-	return (strrev5(str + 1,len - 2) - 1);
+	if(n<0) num[i] = '-';
+	else --i;
+
+	int j;
+	for(j=0;i>=0;j++,i--)
+	{
+		str[j] = num[i];
+	}
+	str[j] ='\0';
 }
 
-//字符串匹配
-int Index(string S, string T, int pos){
-	int len_S=S.length();
-	int len_T=T.length();
-	if(len_S<=0 || len_T<=0 || pos<0 ||pos >len_S-1) return ERROR;
+//************************************
+// Method:    AtoI
+// Description:  Transfer a string to a long integer
+// Access:    public 
+// Returns:   void
+// Qualifier:
+// Parameter: long * n
+// Parameter: char * str
+//************************************
+void AtoI(long *n, char* str)
+{
+	if(str == NULL) throw "error";
 
-	int i=pos, j=0, back;
-	while(i<len_S-len_T+1 && j<len_T){
-		if(S[i]==T[j]) {
-			i++;j++;
+	bool sign = false;
+	if(*str == '-')
+	{
+		str++;
+		sign = true;
+	}
+	else if (*str == '+')
+	{
+		str++;
+	}
+
+	*n = 0;
+	while(*str)
+	{
+		if(*str >= '0' && *str <='9')
+		{
+			*n =(*n)*10 + ((*str) - '0') ;
+			str++;
 		}
-		else{
-			i=i-j+1;	j=0;
+		else
+		{
+			throw "error";
 		}
 	}
-	if(j==len_T){
-		return i-j;
+	if(sign == true){(*n) = -(*n);}
+}
+
+//************************************
+// Method:    LoopMove
+// Description:  Move the chars from the string recurrently
+// Access:    public 
+// Returns:   void
+// Qualifier:
+// Parameter: char * pStr
+// Parameter: int steps: The steps to be moved
+//************************************
+void LoopMove(char* pStr, int steps)
+{
+	if (pStr == NULL)
+	{
+		throw "error";
 	}
-	else{
-		return FALSE;
+
+	int len = strlen(pStr);
+
+	if (steps%len != 0)
+	{
+		char* snippet = new char[len];
+		strcpy(snippet, pStr + len - steps%len);
+		*(pStr + len - steps%len) = '\0';
+		strcpy(snippet + steps%len, pStr);
+		strcpy(pStr, snippet);
 	}
 }
 
-void get_next(string P,  int next[]){
-	//求模式串P的next函数值并存入数组next中，i、j分别代表主串、模式串的下标
-	int i = 0; int j = -1; next[0] = -1;
-	while(i < (int)(P.size()-1)){
-		if( j==-1 || P[i] == P[j] ) { ++i; ++j; next[i] = j; }//每当自增i和j，得到一个新的next[i]
-		else j = next[j];//模式串向右移动
-	}
+
+//************************************
+// Method:    strCpy
+// Description:  Copy string from source to destination
+// Access:    public 
+// Returns:   char*: Start address of the destination string
+// Qualifier:
+// Parameter: const char * Src: Source string
+// Parameter: char * Dst: Destination string
+//************************************
+char* strCpy(const char* Src, char* Dst)
+{
+	if(Src == NULL || Dst == NULL) throw "error";
+	char* DstCpy = Dst;
+	while((*Dst++ = *Src++) != '\0');
+	return DstCpy;
 }
 
-void get_nextval(string P,  int nextval[]){
-	//求模式串P的next函数修正值并存入数组nextval
-	int i = 0; int j = -1; nextval[0] = -1;
-	while(i < (int)(P.size()-1)){
-		if(j == -1 || P[i] == P[j]){
-			++i; ++j;
-			if(P[i]!=P[j]){nextval[i]=j;}//下次比较不相等，nextval[i]取j
-			else nextval[i] = nextval[j];//下次比较仍然相等，nextval[i]取j的下一个nextval[j]
-		}
-		else j=nextval[j];
+//************************************
+// Method:    FindSubStr
+// FullName:  Locate substring. Returns a pointer to the first occurrence of str2 in str1, or a null pointer if str2 is not part of str1. The matching process does not include the terminating null-characters.
+// Access:    public 
+// Returns:   const char*: A pointer to the first occurrence in str1 of any of the entire sequence of characters specified in str2, or a null pointer if the sequence is not present in str1.
+// Qualifier:
+// Parameter: const char * str1: C string to be scanned.
+// Parameter: const char * str2: C string containing the sequence of characters to match.
+//************************************
+const char* FindSubStr(const char* str1, const char*str2)
+{
+	if (str1 == NULL || str2 == NULL)
+	{
+		throw "error";
 	}
-} 
+	int len1 = 0;
+	int len2 = 0;
+	const char*p = str1;
+	while(*p++) len1++;
+	p = str2;
+	while(*p++) len2++;
+	if (len1 < len2)
+	{
+		return NULL;
+	}
 
-int Index_KMP(string S, string P, int pos){  
-	//利用模式串P的next函数求P在主串S中第pos个字符之后的位置的KMP算法。
-	//其中，P非空，0<=pos<StrLength(S)。  
-	int i = pos; int j = 0;  
-	while(i < (int)(S.size()) && j < (int)(P.size())){//注意j为int，size()为unsigned int，系统自动将int转换为unsigned int，将-1转换为unsigned int 时将会变为与-1同样补码的无符号数，32位机上为2^32-1
-		if(j == -1 || S[i] == P[j]) { ++i; ++j; }//继续比较后继字符
-		else   j = Next[j];//模式串象右滑动
-	}  
-	if(j == P.size())   return  i - P.size();//匹配成功
-	else  return  0;  
-}//Index_KMP
+	int i = 0;
+	for (;i <= len1 - len2;i++)
+	{
+		int j = 0;
+		while(*(str2 + j))
+		{
+			if(*(str1 + i + j) == *(str2 + j))
+			{
+				j++;
+			}
+			else
+			{
+				break;
+			}
+		}
+		if (j == len2)
+		{
+			return (str1 + i);
+		}
+	}
+	return NULL;
+}
 
 
-void main(){
-	/*
-	char *A=new char[10];//堆上分配空间
-	gets(A);
-	int len=strlen(A);
-	cout<<strrev5(A, len)<<endl;
-	*/
-//////////////////////////////////////////////////////////////////////////
-	/*
+//************************************
+// Method:    InverseSentence
+// FullName:  Inverse a Sentence which is ended with a '.', while keep the order of each word
+// Access:    public 
+// Returns:   void
+// Qualifier:
+// Parameter: char * str
+// Parameter: char * res
+//************************************
+void InverseSentence(char* str, char* res)
+{
+	int	len = strlen(str);
+	int i = len - 1;
+
+	int cnt = 0;//number of letter which is not space
+	int cnt_s = 0;//number of letter which is space
+	for (;i >= 0;i--)
+	{
+
+		if (*(str + i) != ' ' && *(str + i) != '.')
+		{
+			cnt++;
+			if (i == 0 || *(str + i - 1) == ' ' || *(str + i - 1) == '.')
+			{
+				memcpy(res + len - i - cnt, str + i, cnt);		
+				cnt = 0;
+			}
+		}
+		else
+		{
+			cnt_s++;
+			if (*(str + i - 1) != ' ' && *(str + i - 1) != '.')
+			{
+				memcpy(res + len - i - cnt_s, str + i, cnt_s);		
+				cnt_s = 0;
+			}
+		}
+	}
+	*(res + len) = '\0';
+
+	//move the dot to the end
+	memcpy(res, res + 1, len - 1);
+	*(res + len - 1) = '.';
+	*(res + len) = '\0';
+
+}
+
+
+int main(int argc, char* argv[])
+{	
+/************************************************************************/
+/* Tests for StringOperation.cpp                                         */
+/************************************************************************/
+	char a[256];
+	char b[256];
+	cin.getline(a, 256, '\n');
+	InverseSentence(a, b);
+	cout<<b;
+	system("pause");
+
+/*
+	char a[256];
+	char b[256];
+	cin>>a;
+	cin>>b;
+	const char*p = NULL;
+	if ((p = FindSubStr(a, b)) != NULL)
+	{
+		cout<<p;
+	}
+
+	system("pause");*/
+
+
+/*
+	char p[3] = {'a','b','c'};
+	char q[] = "Hello!";
+	char a[256];
+	cin>>a;
+	long n = 0;
+	AtoI(&n, a);
+	cout<<n;
+	system("pause");*/
+
+/*
+	char a[100] = "Hello";			 
+	int steps;
+	cout<<"Input the steps:";
+	std::cin>>steps;
+	LoopMove(a, steps);
+	printf(a);
+	system("pause");*/
+
+
+/*
+	char a[100] = "Hello, World!";
+	char* b = new char[100];
+	b = strCpy(a, b);
+	printf(b);
+	system("pause");*/
+
+/*
 	while (1)
 	{
-		string A;//栈上分配空间
-		cout<<"请输入主串："<<endl;
-		cin>>A;
+		int num;
+		char *str = new char[256];
+		cin>>num;
+		ItoA(num, str);
+		cout<<str<<endl;
 	
-
-		string B;
-		cout<<"请输入模式串："<<endl;
-		cin>>B;
-	
-		int pos;
-		cout<<"请输入主串起始位置："<<endl;
-		cin>>pos;
-	
-		cout<<Index(A, B, pos)<<endl;
-	
-		system("pause");
-	}
-	*/
-
-	//////////////////////////////////////////////////////////////////////////
-
-	while (1)
-	{
-		int POS;
-		string Pattern, To_Match;
-		cout<<"请输入模式串："<<endl;
-		cin>>Pattern;
-		get_next(Pattern, Next);
-		for(int i=0;i<Max_Len;i++){
-			cout<<Next[i]<<" ";
+		char *p = str;
+		while(*p){
+			cout<<*p++;
 		}
-
 		cout<<endl;
-		cout<<"请输入主串："<<endl;
-		cin>>To_Match;
-		cout<<"请输入主串起始位置："<<endl;
-		cin>>POS;
-		cout<<Index_KMP(To_Match, Pattern, POS)<<endl;
+	
+		delete[] str;
 		system("pause");
-	}
+	}*/
+
+
+
+
+/*
+	base* cp=new derived;
+	cout<<typeid(cp).name()<<endl;
+	cout<<typeid(*cp).name()<<endl;
+	funcD(cp);
+	funcC(cp);
+	base *dp=new base;
+	funcC(dp);
+	funcD(dp);
+	system("pause");*/
+
+
+
+
+/*
+	int a = printf("%d\n", 5);
+	int b = printf("%f\n", 6);
+	int c = printf("%d\n", 5.001);
+	int d = printf("%f\n", 5.01);
+
+
+	struct bs
+	{
+		unsigned a:1;
+		unsigned b:3;
+		unsigned c:4;
+	} bit,*PBit;
+	bit.a=1;
+	bit.b=7;
+	bit.c=15;
+	printf("%d,%d,%d\n",bit.a,bit.b,bit.c);
+	PBit=&bit;
+	PBit->a=0;
+	PBit->b&=3;
+	PBit->c|=1;
+	printf("%d,%d,%d\n",PBit->a,PBit->b,PBit->c);
+
+	system("pause");
+	return 0;*/
+
 }
