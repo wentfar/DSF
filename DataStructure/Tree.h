@@ -19,6 +19,7 @@ public:
 	void VisitBiTreePreOrder(void(*Visit)(BiNode<T>)) const;
 	void VisitBiTreeInOrder(void(*Visit)(BiNode<T>)) const;
 	void VisitBiTreePostOrder(void(*Visit)(BiNode<T>)) const;
+	void InOrderNoRecursive(void(*Visit)(BiNode<T>)) const;
 	int NodeCount1() const;
 	int NodeCount2() const;
 	int TreeDepth() const;

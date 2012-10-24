@@ -598,7 +598,7 @@ void main(){
 	}*/
 
 
-/*
+
 	while(1){
 		int A[]={49,38,65,97,76,13,27,49};
 		for(int i=0;i<sizeof(A)/sizeof(A[0]);i++){
@@ -628,15 +628,15 @@ void main(){
 		}
 		cout<<endl;
 
-		//NoRecursiveQSort_S(vec, 0, len-1);
-		NoRecursiveQSort_Q(vec, 0, len-1);
+		NoRecursiveQSort_S(vec, 0, len-1);
+		//NoRecursiveQSort_Q(vec, 0, len-1);
 
 		for(it=vec.begin();it<vec.end();it++){
 				cout<<setw(8)<<*it;
 		}
 
 		system("pause");
-	}*/
+	}
 
 //////////////////////////////////////////////////////////////////////////
 /*
@@ -686,7 +686,7 @@ void main(){
 
 
 	
-	while(1){
+	while(0){
 		int A[]={49,38,65,97,12,15,10,5,26,0};
 		for(int i=0;i<sizeof(A)/sizeof(A[0]);i++){
 			cout<<A[i]<<" ";

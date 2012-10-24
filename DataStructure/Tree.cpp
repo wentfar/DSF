@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Tree.h"
+#include <stack>
 #include <queue>
 #include <deque>
 
@@ -144,6 +145,30 @@ void BiTree<T>::VisitBiTreePostOrder(BiNode<T> *pRoot, void(*Visit)(BiNode<T>)) 
 		VisitBiTreePostOrder(pRoot->RChild, Visit);
 		Visit(*pRoot);
 	} 
+}
+
+
+// 中序非递归版本，用栈实现
+template <typename T>
+void BiTree<T>::InOrderNoRecursive(void(*Visit)(BiNode<T>)) const
+{
+	stack<BiNode<T>> S;
+	BiNode<T>* p = root;
+	while ( p != NULL || !S.empty() )
+	{
+		while( p != NULL )// 左子树入栈
+		{
+			S.push(*p);
+			p = p->LChild;
+		}
+		if ( !S.empty() )
+		{
+			BiNode<T> node = S.top();
+			S.pop();
+			Visit(node);// 访问根结点
+			p = node.RChild;// 通过下一次循环实现右子树遍历
+		}
+	}
 }
 
 //二叉树的结点计数。方法(1)遍历一遍即可得到。
@@ -638,7 +663,7 @@ void main()
 	p_BiTree->VisitBiTreePreOrder(PrintNode);
 	cout<<endl;
 	cout<<"中序遍历：";
-	p_BiTree->VisitBiTreeInOrder(PrintNode);
+	p_BiTree->InOrderNoRecursive(PrintNode);
 	cout<<endl;
 	cout<<"后序遍历：";
 	p_BiTree->VisitBiTreePostOrder(PrintNode);
@@ -738,6 +763,7 @@ void main()
 	p_BiTree->CreatBiTreeByPre_In(PreOrder, InOrder, NodeNum, &BuildedTree);
 
 	BiTree<int> *p_BiTree3 = new BiTree<int>(BuildedTree);
+
 
 	cout<<"BuildedTree前序遍历：";
 	p_BiTree3->VisitBiTreePreOrder(PrintNode);

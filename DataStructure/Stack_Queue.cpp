@@ -5,7 +5,7 @@
 using namespace std;
 
 #define STACK_INIT_SIZE 100
-#define STACKINCREMENT 10
+#define STACKINCREMENT 10//站满时增量
 #define N 20
 #define MAXQSIZE 100
 
@@ -13,13 +13,13 @@ typedef char QElemType;
 typedef char SElemType;
 
 typedef struct{
-	SElemType * base;
+	SElemType * base;//定义栈底指针，指向分配空间首地址
 	SElemType * top;
 	int stacksize;
 }SqStack;
 
 typedef struct{
-	float * base;
+	float * base;//定义栈底指针，指向分配空间首地址
 	float * top;
 	int stacksize;
 }SqStack_float;
@@ -389,11 +389,11 @@ typedef struct QNode{
 }QNode, *QueuePtr;
 
 typedef struct{
-	QueuePtr front;
-	QueuePtr rear;
+	QueuePtr front;//队头
+	QueuePtr rear;//队尾
 }LinkQueue;
 
-//3.28//初始化循环链表表示的队列Q
+//初始化链式队列Q
 void InitQueue(LinkQueue &lq){
 	lq.front=lq.rear=(QueuePtr)malloc(sizeof(QNode));//只初始化队列头
 	if(!lq.front) exit(OVERFLOW);
