@@ -1,30 +1,28 @@
-﻿生成启动时间为 2012/10/24 20:28:25。
-     1>项目“C:\Users\xm\Documents\GitHub\DSF\DataStructure\DataStructure.vcxproj”在节点 2 上(build 个目标)。
+﻿生成启动时间为 2012/10/31 19:54:17。
+     1>项目“C:\Users\YXM\Documents\GitHub\DSF\DataStructure\DataStructure.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
          正在创建“Debug\DataStructure.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
-         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Sort.cpp
-         Sort.cpp
-     1>c:\users\xm\documents\github\dsf\datastructure\Definition.h(7): warning C4005: “OVERFLOW”: 宏重定义
-                 C:\Program Files\Microsoft Visual Studio 10.0\VC\include\math.h(450) : 参见“OVERFLOW”的前一个定义
-     1>Sort.cpp(142): warning C4805: “==”: 在操作中将类型“int”与类型“bool”混合不安全
-     1>Sort.cpp(141): warning C4101: “change”: 未引用的局部变量
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Sort_Internal.cpp
+         Sort_Internal.cpp
+     1>Sort_Internal.cpp(268): warning C4018: “<”: 有符号/无符号不匹配
+     1>Sort_Internal.cpp(284): warning C4018: “<”: 有符号/无符号不匹配
        ManifestResourceCompile:
          所有输出均为最新。
        Link:
-         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\xm\Documents\GitHub\DSF\Debug\DataStructure.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\DataStructure.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\xm\Documents\GitHub\DSF\Debug\DataStructure.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\xm\Documents\GitHub\DSF\Debug\DataStructure.lib" /MACHINE:X86 Debug\DataStructure.exe.embed.manifest.res
-         Debug\Sort.obj
+         c:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\YXM\Documents\GitHub\DSF\Debug\DataStructure.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\DataStructure.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\YXM\Documents\GitHub\DSF\Debug\DataStructure.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\YXM\Documents\GitHub\DSF\Debug\DataStructure.lib" /MACHINE:X86 Debug\DataStructure.exe.embed.manifest.res
+         Debug\Sort_Internal.obj
        Manifest:
          C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\DataStructure.exe.embed.manifest" /manifest Debug\DataStructure.exe.intermediate.manifest
          所有输出均为最新。
        LinkEmbedManifest:
          所有输出均为最新。
-         DataStructure.vcxproj -> C:\Users\xm\Documents\GitHub\DSF\Debug\DataStructure.exe
+         DataStructure.vcxproj -> C:\Users\YXM\Documents\GitHub\DSF\Debug\DataStructure.exe
        FinalizeBuildStatus:
          正在删除文件“Debug\DataStructure.unsuccessfulbuild”。
          正在对“Debug\DataStructure.lastbuildstate”执行 Touch 任务。
-     1>已完成生成项目“C:\Users\xm\Documents\GitHub\DSF\DataStructure\DataStructure.vcxproj”(build 个目标)的操作。
+     1>已完成生成项目“C:\Users\YXM\Documents\GitHub\DSF\DataStructure\DataStructure.vcxproj”(build 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:01.17
+已用时间 00:00:04.19
