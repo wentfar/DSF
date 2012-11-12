@@ -25,13 +25,37 @@ int MyDiv(int x,int y)
 	return ans;    
 } 
 
+class A{
+public:
+	virtual void Func(A a){cout<<"a";}
+};
+
+class B:public A{
+private:
+	virtual void Func(A a){cout<<"b";}
+};
+
 void main()
 {
-	int a = 100;
-	int b = 9;
-	cout<<Add(a, b)<<endl;
+	//int a = 100;
+	//int b = 9;
+	//cout<<Add(a, b)<<endl;
 
-	cout<<MyDiv(a, b);
+	//cout<<MyDiv(a, b);
 
+	//B b;
+	//A* p = &b;
+	//p->Func(b);
+
+	int i = 10;
+	//printf("%d\n", i++);
+	//printf("%d\n", ++i);
+	//printf("%d\n", i++);
+	i = i + i++;
+	//i += i++;
+	cout<<i<<endl;
+	while(i++){
+		cout<<i<<endl;
+	}
 	system("pause");
 }

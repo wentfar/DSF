@@ -60,15 +60,11 @@ int collision(int H_key,int d)
 int SearchHash(HashTable ht, int key, int &p, int &c){
 	p=Hash(key);
 	int p_original=p;
-	while(ht.elem[p].key_value!=NULLKEY && ht.elem[p].key_value!=key){
+	c = 0;
+	while(c<hashsize[ht.size_index] && ht.elem[p].key_value!=NULLKEY && ht.elem[p].key_value!=key){
 		c++;
-		if (c<hashsize[ht.size_index]){
-			p=collision(p_original,c);
-		}
-		else{
-			return UNSUCCESS;
-		}
-	}//该位置中填有记录,并且关键字不相等,线性探测再散列
+		p=collision(p_original,c);
+	}
 
 	if(ht.elem[p].key_value==key)
 		return SUCCESS;
@@ -76,7 +72,21 @@ int SearchHash(HashTable ht, int key, int &p, int &c){
 		return UNSUCCESS;
 }
 
+//删除元素
+int DeleteElem(HashTable ht, int key){
+	int p, c=0;
+	if (SearchHash(ht, key, p, c)==SUCCESS){
+		ht.elem[p].key_value=NULLKEY;
+		ht.count--;
+		return SUCCESS;
+	}
+	else{
+		return UNSUCCESS;
+	}
+}
+
 void RecreateHashTable(HashTable &ht);
+
 //查找不成功时插入数据元素e到开放定址哈希表ht中，并返回1，若冲突次数过大，则重建哈希表
 int InsertHash(HashTable &ht, ElemType e){
 	int p, c=0;
@@ -89,10 +99,9 @@ int InsertHash(HashTable &ht, ElemType e){
 		return SUCCESS;
 	}
 	else {//不存在e，冲突次数c达到上限
-		RecreateHashTable(ht);
-
-		InsertHash(ht, e);//将因为重构哈希表未插入的元素重新插入
-		return UNSUCCESS;
+		RecreateHashTable(ht);//重建新的哈希表ht，ht的容量以及元素的位置发生变化
+		InsertHash(ht, e);//将元素插入
+		return SUCCESS;
 	}
 }
 
@@ -100,8 +109,8 @@ void RecreateHashTable(HashTable &ht)//重建哈希表
 {
 	printf("冲突次数达到上限，增大表长，重建哈希表。。。\n"); 
 
-	ElemType* p_tmp=ht.elem;
-	int ini_size_index=ht.size_index;
+	ElemType* p_tmp=ht.elem;//暂存
+	int size_index_tmp=ht.size_index;//暂存
 
 	//增大存储容量,给ht.elem重新分配空间
 	ht.count=0;
@@ -116,7 +125,7 @@ void RecreateHashTable(HashTable &ht)//重建哈希表
 		ht.elem[i].key_value=NULLKEY;
 
 	//将tmp中的原有的数据按照新的表长插入到重建的哈希表中
-	for(int i=0;i<hashsize[ini_size_index];i++){
+	for(int i=0;i<hashsize[size_index_tmp];i++){
 		if((p_tmp+i)->key_value!=NULLKEY){
 			InsertHash(ht,*(p_tmp+i));
 		}
@@ -125,6 +134,7 @@ void RecreateHashTable(HashTable &ht)//重建哈希表
 	delete[] p_tmp;
 	printf("重建哈希表成功！\n"); 
 }
+
 
 /* 按哈希地址的顺序遍历哈希表 */  
 void TraverseHash(HashTable ht,void(*Visit)(int, ElemType)){
@@ -216,48 +226,53 @@ Node* Hash_Search(HashTable_L ht, int key){
 
 
 void main(){
-	//while(1){
-	//	//ElemType r[12]={{17,1},{60,2},{29,3},{38,4},{1,5},{2,6},{3,7},{4,8},{5,9},{6,10},{7,11},{8,12}};
-	//	ElemType r[12]={{17,1},{60,2},{29,3},{38,4},{1,5},{2,6},{3,7},{4,8},{5,9},{6,10},{60,9},{13,10}};
-	//	HashTable h;
-	//	InitHashTable(h);
+	while(1){
+		//ElemType r[12]={{17,1},{60,2},{29,3},{38,4},{1,5},{2,6},{3,7},{4,8},{5,9},{6,10},{7,11},{8,12}};
+		ElemType r[12]={{17,1},{60,2},{29,3},{38,4},{1,5},{2,6},{3,7},{4,8},{5,9},{6,10},{60,9},{13,10}};
+		HashTable h;
+		InitHashTable(h);
 
-	//	cout<<"向哈希表中插入记录。。。"<<endl;
-	//	for(int i=0;i<sizeof(r)/sizeof(r[0]);i++){
-	//		if(InsertHash(h,r[i]) == DUPLICATE){
-	//			cout<<"表中已有关键字"<<r[i].key_value<<"的记录,无法再插入该记录！"<<endl;
-	//			cout<<"继续插入后续元素。。。"<<endl;
-	//		}
-	//	}
+		cout<<"向哈希表中插入记录。。。"<<endl;
+		for(int i=0;i<sizeof(r)/sizeof(r[0]);i++){
+			if(InsertHash(h,r[i]) == DUPLICATE){
+				cout<<"表中已有关键字"<<r[i].key_value<<"的记录,无法再插入该记录！"<<endl;
+				cout<<"继续插入后续元素。。。"<<endl;
+			}
+		}
 
-	//	printf("按哈希地址的顺序遍历哈希表：\n");
-	//	TraverseHash(h,Print_Hash);
+		printf("按哈希地址的顺序遍历哈希表：\n");
+		TraverseHash(h,Print_Hash);
 
-	//	printf("销毁哈希表。。。\n");
-	//	DestroyHashTable(h);
-	//	system("pause");
+		DeleteElem(h,29);
+
+		printf("按哈希地址的顺序遍历哈希表：\n");
+		TraverseHash(h,Print_Hash);
+
+		printf("销毁哈希表。。。\n");
+		DestroyHashTable(h);
+		system("pause");
+	}
+
+
+	//ElemType1 r[13]={{17,1},{60,2},{29,3},{38,4},{1,5},{2,6},{60,2},{3,7},{4,8},{5,9},{6,10},{7,11},{8,12}};
+	////ElemType1 r[13]={{17,1},{60,2},{29,3},{38,4},{1,5},{2,6},{3,7},{4,8},{5,9},{6,10},{7,11},{8,12}};
+
+	//HashTable_L ht=NULL;
+	//Hash_Init(ht);
+
+	//for(int i=0;i<sizeof(r)/sizeof(r[0]);i++){
+	//	Hash_Insert(ht, r[i]);
 	//}
 
-
-	ElemType1 r[13]={{17,1},{60,2},{29,3},{38,4},{1,5},{2,6},{60,2},{3,7},{4,8},{5,9},{6,10},{7,11},{8,12}};
-	//ElemType1 r[13]={{17,1},{60,2},{29,3},{38,4},{1,5},{2,6},{3,7},{4,8},{5,9},{6,10},{7,11},{8,12}};
-
-	HashTable_L ht=NULL;
-	Hash_Init(ht);
-
-	for(int i=0;i<sizeof(r)/sizeof(r[0]);i++){
-		Hash_Insert(ht, r[i]);
-	}
-
-	while (1)
-	{
-		int key;
-		cout<<"请输入关键字(key):";
-		cin>>key;
-		Node *p=NULL;
-		if(p=Hash_Search(ht, key))
-			cout<<"哈希值与关键字的值分别为："<<Hash1(key)<<" "<<p->elem.key_value<<endl;
-		else
-			cout<<"无匹配!"<<endl;
-	}
+	//while (1)
+	//{
+	//	int key;
+	//	cout<<"请输入关键字(key):";
+	//	cin>>key;
+	//	Node *p=NULL;
+	//	if(p=Hash_Search(ht, key))
+	//		cout<<"哈希值与关键字的值分别为："<<Hash1(key)<<" "<<p->elem.key_value<<endl;
+	//	else
+	//		cout<<"无匹配!"<<endl;
+	//}
 }

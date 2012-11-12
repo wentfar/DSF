@@ -21,7 +21,7 @@
     <None Include="Debug\DataStructure.log" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sort_Internal.cpp" />
+    <ClCompile Include="Recursive.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D33DE3FA-F1CE-4DF4-9A28-DF8849136B1B}</ProjectGuid>

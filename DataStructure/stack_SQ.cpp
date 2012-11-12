@@ -1,4 +1,4 @@
-#include "sq_stack.h"
+#include "stack_SQ.h"
 #include <iostream>
 
 using namespace std;
