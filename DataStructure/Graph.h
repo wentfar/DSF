@@ -4,30 +4,6 @@
 #include <list>
 using namespace std;
 
-//邻接矩阵图的C描述
-const int MAX_VERTEX_NUM = 20;//定义最大顶点个数
-enum GraphKind{DG,DN,UDG,UDN};//有向图，有向网，无向图，无向网
-
-//定义弧
-template <class VRType, class InforType>
-struct ARC 
-{
-	VRType adj;//权值信息。对于无权图用0,1表示；对于有权图则为权值大小
-	InforType* info;//弧信息
-};
-
-//定义邻接矩阵表示的图
-template<class VRType, class InforType, class VertexType>
-struct MGraph 
-{
-	VertexType vexs[MAX_VERTEX_NUM];//顶点向量
-	ARC<VRType, InforType> adjMatrix[MAX_VERTEX_NUM][MAX_VERTEX_NUM];//弧矩阵
-	int vexnum, arcnum;//顶点数以及弧数
-	GraphKind kind;//图的种类
-};
-
-
-//////////////////////////////////////////////////////////////////////////
 
 //邻接矩阵有向图的C++描述
 const int DEFAULT_SIZE = 20;

@@ -21,7 +21,10 @@
     <None Include="Debug\DataStructure.log" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Recursive.cpp" />
+    <ClCompile Include="Graph.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graph.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D33DE3FA-F1CE-4DF4-9A28-DF8849136B1B}</ProjectGuid>

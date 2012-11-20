@@ -18,8 +18,13 @@
     <None Include="Debug\DataStructure.log" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Recursive.cpp">
+    <ClCompile Include="Graph.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graph.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
